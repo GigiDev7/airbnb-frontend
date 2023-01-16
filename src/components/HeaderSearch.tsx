@@ -103,7 +103,7 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
       {isQuantityWindowShown && (
         <div
           onClick={(e) => e.stopPropagation()}
-          className=" flex flex-col w-96 gap-6 absolute right-0 top-28 lg:top-20 shadow-2xl border-[1px] p-10 rounded-xl"
+          className=" flex flex-col w-96 gap-6 absolute right-0 top-24 lg:top-20 shadow-2xl border-[1px] p-10 rounded-xl z-30 bg-white"
         >
           {Object.entries(guestQuantity).map((item, index) => (
             <GuestQuantity
