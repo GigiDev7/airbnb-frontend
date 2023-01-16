@@ -29,7 +29,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="flex items-center justify-between flex-wrap lg:flex-nowrap">
+    <header className="flex items-center justify-between flex-wrap lg:flex-nowrap border-b-[1px] py-4">
       <div className=" flex items-cente">
         <img className="w-8 cursor-pointer" src="/airbnb.png" alt="logo" />
         <h2 className="ml-3 text-red-500 font-bold text-2xl hidden lg:inline-block">
