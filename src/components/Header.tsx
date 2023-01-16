@@ -29,7 +29,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="flex items-center justify-between">
+    <header className="flex items-center justify-between flex-wrap lg:flex-nowrap">
       <div className=" flex items-cente">
         <img className="w-8 cursor-pointer" src="/airbnb.png" alt="logo" />
         <h2 className="ml-3 text-red-500 font-bold text-2xl hidden lg:inline-block">
@@ -52,12 +52,12 @@ const Header: React.FC = () => {
           </button>
         </div>
       ) : (
-        <div className="">
+        <div className="order-last lg:-order-none mt-8 lg:mt-0">
           <HeaderSearch showForm={showForm} />
         </div>
       )}
 
-      <div className="flex items-cente">
+      <div className="flex items-center">
         <div className="mr-4 hover:bg-gray-200 py-2 px-3 rounded-3xl">
           <TbWorld className="text-xl cursor-pointer" />
         </div>
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
           <BsFillPersonFill className="text-xl" />
         </div>
         {isWindowShown && (
-          <div className="flex flex-col absolute top-12 right-10 lg:right-16 shadow-2xl border-[1px] rounded-xl py-4">
+          <div className="flex flex-col absolute top-14 right-10 lg:right-16 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-30 bg-white">
             <a className="pl-4 pr-16 hover:bg-gray-100 py-4" href="#">
               Sign up
             </a>
