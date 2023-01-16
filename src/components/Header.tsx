@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { TbWorld } from "react-icons/tb";
 import { GoThreeBars } from "react-icons/go";
 import { BsFillPersonFill } from "react-icons/bs";
