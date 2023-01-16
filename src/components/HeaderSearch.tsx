@@ -1,8 +1,10 @@
-import React, { FocusEvent, MouseEvent, useState } from "react";
+import React, { MouseEvent, useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import GuestQuantity from "./GuestQuantity";
 
-const HeaderSearch: React.FC = () => {
+const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
+  showForm,
+}) => {
   const [guestQuantity, setGuestQuantity] = useState({
     Adults: { placeholder: "Ages 13 or above", quantity: 0 },
     Children: { placeholder: "Ages 2-12", quantity: 0 },
@@ -12,12 +14,25 @@ const HeaderSearch: React.FC = () => {
 
   const [isQuantityWindowShown, setIsQuantityWindowShown] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      document.removeEventListener("click", hideWindow);
+    };
+  }, []);
+
+  const hideWindow = () => {
+    setIsQuantityWindowShown(false);
+  };
+
   const showWindow = (e: MouseEvent) => {
     setIsQuantityWindowShown(true);
     e.stopPropagation();
-    document.addEventListener("click", (e) => {
-      setIsQuantityWindowShown(false);
-    });
+    document.addEventListener("click", hideWindow);
+  };
+
+  const preserveOpenForm = (e: MouseEvent) => {
+    showForm(e);
+    hideWindow();
   };
 
   const increaseQuantity = (field: keyof typeof guestQuantity) => {
@@ -43,7 +58,10 @@ const HeaderSearch: React.FC = () => {
   };
 
   return (
-    <form className="flex items-center border-2 p-2 rounded-3xl relative">
+    <form
+      onClick={(e) => preserveOpenForm(e)}
+      className="flex items-center border-2 p-2 rounded-3xl relative"
+    >
       <div className="flex flex-col pl-2 ">
         <label>Where</label>
         <input

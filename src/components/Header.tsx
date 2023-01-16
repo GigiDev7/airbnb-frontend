@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MouseEvent, useEffect, useState } from "react";
 import { TbWorld } from "react-icons/tb";
 import { GoThreeBars } from "react-icons/go";
 import { BsFillPersonFill } from "react-icons/bs";
@@ -10,7 +10,23 @@ const Header: React.FC = () => {
   const [clickedOption, setClickedOption] = useState("");
   const [isFormShown, setIsFormShown] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      document.removeEventListener("click", hideForm);
+    };
+  }, []);
+
   const handleWindowShow = () => setIsWindowShown((prev) => !prev);
+
+  const showForm = (e: MouseEvent) => {
+    setIsFormShown(true);
+    e.stopPropagation();
+    document.addEventListener("click", hideForm);
+  };
+
+  const hideForm = () => {
+    setIsFormShown(false);
+  };
 
   return (
     <header className="flex items-center justify-between">
@@ -23,7 +39,7 @@ const Header: React.FC = () => {
 
       {!isFormShown ? (
         <div
-          onClick={() => setIsFormShown(true)}
+          onClick={(e) => showForm(e)}
           className="flex items-center border-2 p-2 rounded-3xl"
         >
           <button className="px-2">Anywhere</button>
@@ -36,7 +52,9 @@ const Header: React.FC = () => {
           </button>
         </div>
       ) : (
-        <HeaderSearch />
+        <div className="">
+          <HeaderSearch showForm={showForm} />
+        </div>
       )}
 
       <div className="flex items-cente">
