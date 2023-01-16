@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 
+type QuantityField = "Adults" | "Children" | "Infants" | "Pets";
+
 const GuestQuantity: React.FC<{
-  field: "Adults" | "Children" | "Infants" | "Pets";
+  field: QuantityField;
   fieldPlaceHolder: string;
   quantity: number;
   last: boolean;
-  increase: (field: "Adults" | "Children" | "Infants" | "Pets") => void;
-  decrease: (field: "Adults" | "Children" | "Infants" | "Pets") => void;
+  increase: (field: QuantityField) => void;
+  decrease: (field: QuantityField) => void;
 }> = ({ field, fieldPlaceHolder, quantity, last, decrease, increase }) => {
   return (
     <div

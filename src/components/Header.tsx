@@ -4,29 +4,17 @@ import { GoThreeBars } from "react-icons/go";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import HeaderSearch from "./HeaderSearch";
+import { useToggleWindow } from "../hooks/useWindow";
 
 const Header: React.FC = () => {
-  const [isWindowShown, setIsWindowShown] = useState(false);
-  const [clickedOption, setClickedOption] = useState("");
-  const [isFormShown, setIsFormShown] = useState(false);
+  const personWindow = useToggleWindow();
+  const formWindow = useToggleWindow(true);
 
   useEffect(() => {
     return () => {
-      document.removeEventListener("click", hideForm);
+      document.removeEventListener("click", formWindow.hideWindow);
     };
   }, []);
-
-  const handleWindowShow = () => setIsWindowShown((prev) => !prev);
-
-  const showForm = (e: MouseEvent) => {
-    setIsFormShown(true);
-    e.stopPropagation();
-    document.addEventListener("click", hideForm);
-  };
-
-  const hideForm = () => {
-    setIsFormShown(false);
-  };
 
   return (
     <header className="flex items-center justify-between flex-wrap lg:flex-nowrap border-b-[1px] py-4">
@@ -37,9 +25,9 @@ const Header: React.FC = () => {
         </h2>
       </div>
 
-      {!isFormShown ? (
+      {!formWindow.isWindowShown ? (
         <div
-          onClick={(e) => showForm(e)}
+          onClick={(e) => formWindow.showWindow(e)}
           className="flex items-center border-2 p-2 rounded-3xl"
         >
           <button className="px-2">Anywhere</button>
@@ -53,7 +41,7 @@ const Header: React.FC = () => {
         </div>
       ) : (
         <div className="order-last lg:-order-none mt-8 lg:mt-0">
-          <HeaderSearch showForm={showForm} />
+          <HeaderSearch showForm={formWindow.showWindow} />
         </div>
       )}
 
@@ -62,13 +50,13 @@ const Header: React.FC = () => {
           <TbWorld className="text-xl cursor-pointer" />
         </div>
         <div
-          onClick={handleWindowShow}
+          onClick={personWindow.toggleWindow}
           className="relative flex items-center border-2 py-2 px-3 rounded-3xl hover:shadow-md cursor-pointer"
         >
           <GoThreeBars className="text-xl mr-2" />
           <BsFillPersonFill className="text-xl" />
         </div>
-        {isWindowShown && (
+        {personWindow.isWindowShown && (
           <div className="flex flex-col absolute top-14 right-10 lg:right-16 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-30 bg-white">
             <a className="pl-4 pr-16 hover:bg-gray-100 py-4" href="#">
               Sign up

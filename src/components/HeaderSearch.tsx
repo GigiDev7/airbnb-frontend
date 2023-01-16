@@ -1,6 +1,7 @@
 import React, { MouseEvent, useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import GuestQuantity from "./GuestQuantity";
+import { useToggleWindow } from "../hooks/useWindow";
 
 const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
   showForm,
@@ -12,7 +13,16 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
     Pets: { placeholder: "", quantity: 0 },
   });
 
-  const [isQuantityWindowShown, setIsQuantityWindowShown] = useState(false);
+  const {
+    isWindowShown: isQuantityWindowShown,
+    hideWindow,
+    showWindow,
+  } = useToggleWindow(true);
+
+  const preserveOpenForm = (e: MouseEvent) => {
+    showForm(e);
+    hideWindow();
+  };
 
   useEffect(() => {
     return () => {
@@ -35,21 +45,6 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
       text = `${text} ${guestQuantity.Pets.quantity} pets`;
 
     return text;
-  };
-
-  const hideWindow = () => {
-    setIsQuantityWindowShown(false);
-  };
-
-  const showWindow = (e: MouseEvent) => {
-    setIsQuantityWindowShown(true);
-    e.stopPropagation();
-    document.addEventListener("click", hideWindow);
-  };
-
-  const preserveOpenForm = (e: MouseEvent) => {
-    showForm(e);
-    hideWindow();
   };
 
   const increaseQuantity = (field: keyof typeof guestQuantity) => {
