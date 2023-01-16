@@ -20,6 +20,23 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
     };
   }, []);
 
+  const sumOfQuantities = () => {
+    let text = "";
+    const sum =
+      guestQuantity.Adults.quantity +
+      guestQuantity.Children.quantity +
+      guestQuantity.Infants.quantity;
+    if (sum === 0) text = "Add guests";
+    if (sum === 1) text = "1 guest";
+    if (sum > 1) text = `${sum} guests`;
+
+    if (guestQuantity.Pets.quantity === 1) text = `${text}, 1 pet`;
+    if (guestQuantity.Pets.quantity > 1)
+      text = `${text} ${guestQuantity.Pets.quantity} pets`;
+
+    return text;
+  };
+
   const hideWindow = () => {
     setIsQuantityWindowShown(false);
   };
@@ -86,7 +103,7 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
         className="flex flex-col mr-6 cursor-pointer"
       >
         <h2>Who</h2>
-        <p className="text-gray-400">Add guests</p>
+        <p className="text-gray-400">{sumOfQuantities()}</p>
       </div>
       {isQuantityWindowShown && (
         <div
