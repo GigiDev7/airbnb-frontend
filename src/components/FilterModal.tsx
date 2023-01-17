@@ -74,6 +74,22 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
     });
   };
 
+  const handleClear = () => {
+    setRooms({ bathrooms: 0, bedrooms: 0 });
+    setPriceRange({ minPrice: 0, maxPrice: 0 });
+    setTypeOfPlace({
+      entire: false,
+      private: false,
+      shared: false,
+    });
+    setPropertyType({
+      home: false,
+      apartment: false,
+      guesthouse: false,
+      hotel: false,
+    });
+  };
+
   return (
     <>
       <div className="bg-[rgba(0,0,0,0.3)] fixed top-0 bottom-0 left-0 right-0 z-50"></div>
@@ -120,6 +136,7 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
           <div className="flex flex-col lg:flex-row flex-wrap gap-4">
             <div className="flex ">
               <input
+                checked={typeOfPlace.entire}
                 onChange={(e) => handleTypeOfPlace(e, "entire")}
                 className="w-6 h-6 mr-2"
                 type="checkbox"
@@ -131,6 +148,7 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
             </div>
             <div className="flex ">
               <input
+                checked={typeOfPlace.private}
                 onChange={(e) => handleTypeOfPlace(e, "private")}
                 className="w-6 h-6 mr-2"
                 type="checkbox"
@@ -145,6 +163,7 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
             </div>
             <div className="flex">
               <input
+                checked={typeOfPlace.shared}
                 onChange={(e) => handleTypeOfPlace(e, "shared")}
                 className="w-6 h-6 mr-2"
                 type="checkbox"
@@ -221,7 +240,17 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
           </div>
         </div>
 
-        <button> Filter</button>
+        <div className="flex justify-between w-full mt-5">
+          <button
+            onClick={handleClear}
+            className="border-b-2 border-black hover:text-gray-600"
+          >
+            Clear all
+          </button>
+          <button className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-900">
+            Filter
+          </button>
+        </div>
       </div>
     </>
   );
