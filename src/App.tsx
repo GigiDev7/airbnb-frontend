@@ -1,12 +1,14 @@
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import { Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
+    <>
       <Header />
+      <Routes></Routes>
       <Footer />
-    </div>
+    </>
   );
 }
 
