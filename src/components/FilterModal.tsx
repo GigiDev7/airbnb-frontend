@@ -6,7 +6,19 @@ import { GiFamilyHouse } from "react-icons/gi";
 import { FaHotel } from "react-icons/fa";
 
 const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
+  const [priceRange, setPriceRange] = useState({ minPrice: 0, maxPrice: 0 });
+  const [typeOfPlace, setTypeOfPlace] = useState({
+    entire: false,
+    private: false,
+    shared: false,
+  });
   const [rooms, setRooms] = useState({ bathrooms: 0, bedrooms: 0 });
+  const [propertyType, setPropertyType] = useState({
+    home: false,
+    apartment: false,
+    guesthouse: false,
+    hotel: false,
+  });
 
   const renderQuantities = (type: keyof typeof rooms) => {
     const arr = [...Array(9).keys()];
@@ -16,14 +28,49 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
     return arr.map((item) => {
       return (
         <div
+          onClick={(e) => handleRooms(e, type)}
           key={item}
           className={`border-[1px] px-6 py-1 rounded-xl cursor-pointer hover:border-black ${
-            rooms[type] === item && selectedClass
+            rooms[type] == item && selectedClass
           }`}
         >
-          {item === 0 ? "Any" : item === 8 ? "8+" : item}
+          {item == 0 ? "Any" : item == 8 ? "8+" : item}
         </div>
       );
+    });
+  };
+
+  const handlePriceRange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: keyof typeof priceRange
+  ) => {
+    setPriceRange((prev) => {
+      return { ...prev, [type]: e.target.value };
+    });
+  };
+
+  const handleTypeOfPlace = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: keyof typeof typeOfPlace
+  ) => {
+    setTypeOfPlace((prev) => {
+      return { ...prev, [type]: e.target.checked };
+    });
+  };
+
+  const handleRooms = (e: any, type: keyof typeof rooms) => {
+    let value = e.target.innerHTML;
+    if (value == "Any") value = 0;
+    if (value == "8+") value = 8;
+    value *= 1;
+    setRooms((prev) => {
+      return { ...prev, [type]: value };
+    });
+  };
+
+  const handlePropertyType = (type: keyof typeof propertyType) => {
+    setPropertyType((prev) => {
+      return { ...prev, [type]: !prev[type] };
     });
   };
 
@@ -44,7 +91,12 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
               <label className="text-gray-500 text-sm">min price</label>
               <p>
                 <span className="mr-1">$</span>
-                <input className="outline-0" type="text" />
+                <input
+                  value={priceRange.minPrice}
+                  onChange={(e) => handlePriceRange(e, "minPrice")}
+                  className="outline-0"
+                  type="text"
+                />
               </p>
             </div>
             <span className="flex-2 mx-5">-</span>
@@ -52,7 +104,12 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
               <label className="text-gray-500 text-sm">max price</label>
               <p>
                 <span className="mr-1">$</span>
-                <input className="outline-0" type="text" />
+                <input
+                  onChange={(e) => handlePriceRange(e, "maxPrice")}
+                  value={priceRange.maxPrice}
+                  className="outline-0"
+                  type="text"
+                />
               </p>
             </div>
           </div>
@@ -62,14 +119,22 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
           <h2 className="text-xl font-bold mb-4">Type of place</h2>
           <div className="flex flex-col lg:flex-row flex-wrap gap-4">
             <div className="flex ">
-              <input className="w-6 h-6 mr-2" type="checkbox" />
+              <input
+                onChange={(e) => handleTypeOfPlace(e, "entire")}
+                className="w-6 h-6 mr-2"
+                type="checkbox"
+              />
               <div className="flex flex-col">
                 <label>Entire place</label>
                 <p className="text-gray-500">A place all to yourself</p>
               </div>
             </div>
             <div className="flex ">
-              <input className="w-6 h-6 mr-2" type="checkbox" />
+              <input
+                onChange={(e) => handleTypeOfPlace(e, "private")}
+                className="w-6 h-6 mr-2"
+                type="checkbox"
+              />
               <div className="flex flex-col">
                 <label>Private room</label>
                 <p className="text-gray-500">
@@ -79,7 +144,11 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
               </div>
             </div>
             <div className="flex">
-              <input className="w-6 h-6 mr-2" type="checkbox" />
+              <input
+                onChange={(e) => handleTypeOfPlace(e, "shared")}
+                className="w-6 h-6 mr-2"
+                type="checkbox"
+              />
               <div className="flex flex-col">
                 <label>Shared room</label>
                 <p className="text-gray-500">
@@ -113,24 +182,46 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
         <div className="flex flex-col w-full mt-4">
           <h2 className="text-xl font-bold mb-4">Property type</h2>
           <div className="flex flex-wrap gap-4">
-            <div className="flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black">
-              <BsHouseDoor />
+            <div
+              onClick={() => handlePropertyType("home")}
+              className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
+                propertyType.home && "border-black"
+              }`}
+            >
+              <BsHouseDoor className="text-xl" />
               <p>House</p>
             </div>
-            <div className="flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black">
-              <BiBuildingHouse />
+            <div
+              onClick={() => handlePropertyType("apartment")}
+              className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
+                propertyType.apartment && "border-black"
+              }`}
+            >
+              <BiBuildingHouse className="text-xl" />
               <p>Apartment</p>
             </div>
-            <div className="flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black">
-              <GiFamilyHouse />
+            <div
+              onClick={() => handlePropertyType("guesthouse")}
+              className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
+                propertyType.guesthouse && "border-black"
+              }`}
+            >
+              <GiFamilyHouse className="text-xl" />
               <p>Guesthouse</p>
             </div>
-            <div className="flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black">
-              <FaHotel />
+            <div
+              onClick={() => handlePropertyType("hotel")}
+              className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
+                propertyType.hotel && "border-black"
+              }`}
+            >
+              <FaHotel className="text-xl" />
               <p>Hotel</p>
             </div>
           </div>
         </div>
+
+        <button> Filter</button>
       </div>
     </>
   );
