@@ -21,7 +21,9 @@ const Header: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      <FilterModal />
+      {filterWindow.isWindowShown && (
+        <FilterModal hideModal={filterWindow.hideWindow} />
+      )}
       <header className="flex items-center justify-between flex-wrap lg:flex-nowrap border-b-[1px] py-4">
         <div className=" flex items-cente">
           <img className="w-8 cursor-pointer" src="/airbnb.png" alt="logo" />
@@ -82,7 +84,10 @@ const Header: React.FC = () => {
           )}
         </div>
       </header>
-      <div className="self-end mt-6 border-[1px] rounded-md p-2 cursor-pointer">
+      <div
+        onClick={filterWindow.showWindow}
+        className="self-end mt-6 border-[1px] rounded-md p-2 cursor-pointer"
+      >
         <button className="flex items-center text-md">
           <MdFilterListAlt className="mr-1" /> Filters
         </button>

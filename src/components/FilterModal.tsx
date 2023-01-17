@@ -5,7 +5,7 @@ import { BiBuildingHouse } from "react-icons/bi";
 import { GiFamilyHouse } from "react-icons/gi";
 import { FaHotel } from "react-icons/fa";
 
-const FilterModal: React.FC = () => {
+const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
   const [rooms, setRooms] = useState({ bathrooms: 0, bedrooms: 0 });
 
   const renderQuantities = (type: keyof typeof rooms) => {
@@ -31,7 +31,10 @@ const FilterModal: React.FC = () => {
     <>
       <div className="bg-[rgba(0,0,0,0.3)] fixed top-0 bottom-0 left-0 right-0 z-50"></div>
       <div className="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-3/4 bg-white rounded-xl flex flex-col items-center px-6 overflow-auto pb-8">
-        <AiOutlineClose className="absolute left-5 top-5 cursor-pointer text-xl" />
+        <AiOutlineClose
+          onClick={hideModal}
+          className="absolute left-5 top-5 cursor-pointer text-xl"
+        />
         <h2 className="mt-5 border-b-[1px] w-full text-center pb-5">Filters</h2>
 
         <div className="flex flex-col w-full mt-4">
