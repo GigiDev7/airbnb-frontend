@@ -6,10 +6,12 @@ import image from "/home.webp";
 import { useToggleWindow } from "../hooks/useWindow";
 import ModalLayout from "../components/ModalLayout";
 import Review from "../components/Review";
+import ImagesSlider from "../components/ImagesSlider";
 
 const SingleResultPage = () => {
   const amenitiesModal = useToggleWindow();
   const reviewsModal = useToggleWindow();
+  const imageSlider = useToggleWindow();
 
   return (
     <div className="mt-16 pb-16">
@@ -38,6 +40,9 @@ const SingleResultPage = () => {
           </div>
         </ModalLayout>
       )}
+      {imageSlider.isWindowShown && (
+        <ImagesSlider closeModal={imageSlider.hideWindow} />
+      )}
       <div>
         <h1 className="text-2xl font-semibold">
           NEST Bunnefjorden - Mirrored Glass Cabin
@@ -53,14 +58,19 @@ const SingleResultPage = () => {
 
       <div className="flex justify-center gap-8 lg:gap-4 mt-5 relative">
         <img
+          onClick={imageSlider.showWindow}
           className="w-2/5 lg:h-80 lg:w-1/3 rounded-l-xl hover:opacity-[0.9] cursor-pointer"
           src={image}
         />
         <img
+          onClick={imageSlider.showWindow}
           className="w-2/5 lg:h-80 lg:w-1/3 rounded-r-xl hover:opacity-[0.9] cursor-pointer"
           src={image}
         />
-        <button className="absolute flex items-center right-16 lg:right-64 bottom-5 p-2 rounded-xl hover:bg-gray-200 bg-white">
+        <button
+          onClick={imageSlider.showWindow}
+          className="absolute flex items-center right-16 lg:right-64 bottom-5 p-2 rounded-xl hover:bg-gray-200 bg-white"
+        >
           <MdOutlinePhotoSizeSelectLarge /> Show all photos
         </button>
       </div>
