@@ -1,11 +1,16 @@
 import React from "react";
 import image from "/home.webp";
+import { Link } from "react-router-dom";
 import { AiFillStar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 
 const ResultCard = () => {
   return (
-    <div className="flex flex-col  w-1/3 lg:w-1/5 relative icon-container">
+    <Link
+      to={`/property/id`}
+      target="_blank"
+      className="flex flex-col  w-1/3 lg:w-1/5 relative icon-container"
+    >
       <div className="absolute top-1/2 -translate-y-1/2 flex justify-between w-full px-2">
         <BsArrowLeftCircle className="text-white text-2xl cursor-pointer arrow-icon" />
         <BsArrowRightCircle className="text-white text-2xl cursor-pointer arrow-icon" />
@@ -26,7 +31,7 @@ const ResultCard = () => {
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
