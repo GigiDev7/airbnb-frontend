@@ -15,3 +15,11 @@ body {
   width: 90%;
   margin: 0 auto;
 }
+
+.arrow-icon {
+  display: none;
+}
+
+.icon-container:hover .arrow-icon {
+  display: inline-block;
+}
