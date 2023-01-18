@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import ModalLayout from "./ModalLayout";
 import { BsHouseDoor } from "react-icons/bs";
 import { BiBuildingHouse } from "react-icons/bi";
 import { GiFamilyHouse } from "react-icons/gi";
@@ -99,168 +99,160 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
   };
 
   return (
-    <>
-      <div className="bg-[rgba(0,0,0,0.3)] fixed top-0 bottom-0 left-0 right-0 z-50"></div>
-      <div className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-3/4 bg-white rounded-xl flex flex-col items-center px-6 overflow-auto">
-        <AiOutlineClose
-          onClick={hideModal}
-          className="absolute left-5 top-5 cursor-pointer text-xl"
-        />
-        <h2 className="mt-5 border-b-[1px] w-full text-center pb-5">Filters</h2>
+    <ModalLayout closeModal={hideModal}>
+      <h2 className="mt-5 border-b-[1px] w-full text-center pb-5">Filters</h2>
 
-        <div className="flex flex-col w-full mt-4">
-          <h2 className="text-xl font-bold mb-4">Price range</h2>
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center">
-            <div className="flex flex-col border-[2px] flex-1 py-1 pl-2 rounded-lg">
-              <label className="text-gray-500 text-sm">min price</label>
-              <p>
-                <span className="mr-1">$</span>
-                <input
-                  value={priceRange.minPrice}
-                  onChange={(e) => handlePriceRange(e, "minPrice")}
-                  className="outline-0"
-                  type="text"
-                />
-              </p>
-            </div>
-            <span className="flex-2 mx-5">-</span>
-            <div className="flex flex-col border-[2px] flex-1 py-1 pl-2 rounded-lg">
-              <label className="text-gray-500 text-sm">max price</label>
-              <p>
-                <span className="mr-1">$</span>
-                <input
-                  onChange={(e) => handlePriceRange(e, "maxPrice")}
-                  value={priceRange.maxPrice}
-                  className="outline-0"
-                  type="text"
-                />
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full mt-4">
-          <h2 className="text-xl font-bold mb-4">Type of place</h2>
-          <div className="flex flex-col lg:flex-row flex-wrap gap-4">
-            <div className="flex ">
+      <div className="flex flex-col w-full mt-4">
+        <h2 className="text-xl font-bold mb-4">Price range</h2>
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center">
+          <div className="flex flex-col border-[2px] flex-1 py-1 pl-2 rounded-lg">
+            <label className="text-gray-500 text-sm">min price</label>
+            <p>
+              <span className="mr-1">$</span>
               <input
-                checked={typeOfPlace.entire}
-                onChange={(e) => handleTypeOfPlace(e, "entire")}
-                className="w-6 h-6 mr-2"
-                type="checkbox"
+                value={priceRange.minPrice}
+                onChange={(e) => handlePriceRange(e, "minPrice")}
+                className="outline-0"
+                type="text"
               />
-              <div className="flex flex-col">
-                <label>Entire place</label>
-                <p className="text-gray-500">A place all to yourself</p>
-              </div>
-            </div>
-            <div className="flex ">
+            </p>
+          </div>
+          <span className="flex-2 mx-5">-</span>
+          <div className="flex flex-col border-[2px] flex-1 py-1 pl-2 rounded-lg">
+            <label className="text-gray-500 text-sm">max price</label>
+            <p>
+              <span className="mr-1">$</span>
               <input
-                checked={typeOfPlace.private}
-                onChange={(e) => handleTypeOfPlace(e, "private")}
-                className="w-6 h-6 mr-2"
-                type="checkbox"
+                onChange={(e) => handlePriceRange(e, "maxPrice")}
+                value={priceRange.maxPrice}
+                className="outline-0"
+                type="text"
               />
-              <div className="flex flex-col">
-                <label>Private room</label>
-                <p className="text-gray-500">
-                  Your own room in a home or a hotel, plus some shared common
-                  spaces
-                </p>
-              </div>
-            </div>
-            <div className="flex">
-              <input
-                checked={typeOfPlace.shared}
-                onChange={(e) => handleTypeOfPlace(e, "shared")}
-                className="w-6 h-6 mr-2"
-                type="checkbox"
-              />
-              <div className="flex flex-col">
-                <label>Shared room</label>
-                <p className="text-gray-500">
-                  A sleeping space and common areas that may be shared with
-                  others
-                </p>
-              </div>
-            </div>
+            </p>
           </div>
-        </div>
-
-        <div className="flex flex-col w-full mt-4">
-          <h2 className="text-xl font-bold mb-4">Rooms and beds</h2>
-          <div>
-            <div className="flex flex-col">
-              <h3 className="text-gray-600 mb-3">Bedrooms</h3>
-              <div className="flex  gap-2 flex-wrap ">
-                {renderQuantities("bedrooms")}
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <h3 className="text-gray-600 my-3">Bathrooms</h3>
-              <div className="flex flex-wrap gap-2">
-                {renderQuantities("bathrooms")}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full mt-4">
-          <h2 className="text-xl font-bold mb-4">Property type</h2>
-          <div className="flex flex-wrap gap-4">
-            <div
-              onClick={() => handlePropertyType("home")}
-              className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
-                propertyType.home && "border-black"
-              }`}
-            >
-              <BsHouseDoor className="text-xl" />
-              <p>House</p>
-            </div>
-            <div
-              onClick={() => handlePropertyType("apartment")}
-              className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
-                propertyType.apartment && "border-black"
-              }`}
-            >
-              <BiBuildingHouse className="text-xl" />
-              <p>Apartment</p>
-            </div>
-            <div
-              onClick={() => handlePropertyType("guesthouse")}
-              className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
-                propertyType.guesthouse && "border-black"
-              }`}
-            >
-              <GiFamilyHouse className="text-xl" />
-              <p>Guesthouse</p>
-            </div>
-            <div
-              onClick={() => handlePropertyType("hotel")}
-              className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
-                propertyType.hotel && "border-black"
-              }`}
-            >
-              <FaHotel className="text-xl" />
-              <p>Hotel</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-between w-full mt-5 border-t-[1px] py-5 sticky bottom-0 z-50 bg-white">
-          <button
-            onClick={handleClear}
-            className="border-b-2 border-black hover:text-gray-600"
-          >
-            Clear all
-          </button>
-          <button className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-900">
-            Filter
-          </button>
         </div>
       </div>
-    </>
+
+      <div className="flex flex-col w-full mt-4">
+        <h2 className="text-xl font-bold mb-4">Type of place</h2>
+        <div className="flex flex-col lg:flex-row flex-wrap gap-4">
+          <div className="flex ">
+            <input
+              checked={typeOfPlace.entire}
+              onChange={(e) => handleTypeOfPlace(e, "entire")}
+              className="w-6 h-6 mr-2"
+              type="checkbox"
+            />
+            <div className="flex flex-col">
+              <label>Entire place</label>
+              <p className="text-gray-500">A place all to yourself</p>
+            </div>
+          </div>
+          <div className="flex ">
+            <input
+              checked={typeOfPlace.private}
+              onChange={(e) => handleTypeOfPlace(e, "private")}
+              className="w-6 h-6 mr-2"
+              type="checkbox"
+            />
+            <div className="flex flex-col">
+              <label>Private room</label>
+              <p className="text-gray-500">
+                Your own room in a home or a hotel, plus some shared common
+                spaces
+              </p>
+            </div>
+          </div>
+          <div className="flex">
+            <input
+              checked={typeOfPlace.shared}
+              onChange={(e) => handleTypeOfPlace(e, "shared")}
+              className="w-6 h-6 mr-2"
+              type="checkbox"
+            />
+            <div className="flex flex-col">
+              <label>Shared room</label>
+              <p className="text-gray-500">
+                A sleeping space and common areas that may be shared with others
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col w-full mt-4">
+        <h2 className="text-xl font-bold mb-4">Rooms and beds</h2>
+        <div>
+          <div className="flex flex-col">
+            <h3 className="text-gray-600 mb-3">Bedrooms</h3>
+            <div className="flex  gap-2 flex-wrap ">
+              {renderQuantities("bedrooms")}
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <h3 className="text-gray-600 my-3">Bathrooms</h3>
+            <div className="flex flex-wrap gap-2">
+              {renderQuantities("bathrooms")}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col w-full mt-4">
+        <h2 className="text-xl font-bold mb-4">Property type</h2>
+        <div className="flex flex-wrap gap-4">
+          <div
+            onClick={() => handlePropertyType("home")}
+            className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
+              propertyType.home && "border-black"
+            }`}
+          >
+            <BsHouseDoor className="text-xl" />
+            <p>House</p>
+          </div>
+          <div
+            onClick={() => handlePropertyType("apartment")}
+            className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
+              propertyType.apartment && "border-black"
+            }`}
+          >
+            <BiBuildingHouse className="text-xl" />
+            <p>Apartment</p>
+          </div>
+          <div
+            onClick={() => handlePropertyType("guesthouse")}
+            className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
+              propertyType.guesthouse && "border-black"
+            }`}
+          >
+            <GiFamilyHouse className="text-xl" />
+            <p>Guesthouse</p>
+          </div>
+          <div
+            onClick={() => handlePropertyType("hotel")}
+            className={`flex flex-col gap-8 border-[1px] py-5 pl-5 w-2/5 lg:w-1/5 rounded-xl cursor-pointer hover:border-black ${
+              propertyType.hotel && "border-black"
+            }`}
+          >
+            <FaHotel className="text-xl" />
+            <p>Hotel</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-between w-full mt-5 border-t-[1px] py-5 sticky bottom-0 z-50 bg-white">
+        <button
+          onClick={handleClear}
+          className="border-b-2 border-black hover:text-gray-600"
+        >
+          Clear all
+        </button>
+        <button className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-900">
+          Filter
+        </button>
+      </div>
+    </ModalLayout>
   );
 };
 

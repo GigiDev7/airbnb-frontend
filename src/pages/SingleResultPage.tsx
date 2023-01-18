@@ -3,10 +3,41 @@ import { AiFillStar } from "react-icons/ai";
 import { MdOutlinePhotoSizeSelectLarge } from "react-icons/md";
 import { BiBed } from "react-icons/bi";
 import image from "/home.webp";
+import { useToggleWindow } from "../hooks/useWindow";
+import ModalLayout from "../components/ModalLayout";
+import Review from "../components/Review";
 
 const SingleResultPage = () => {
+  const amenitiesModal = useToggleWindow();
+  const reviewsModal = useToggleWindow();
+
   return (
     <div className="mt-16 pb-16">
+      {amenitiesModal.isWindowShown && (
+        <ModalLayout closeModal={amenitiesModal.hideWindow}>
+          <div className="self-start mt-16 w-full">
+            <h2 className="font-medium text-2xl mb-8">
+              What this place offers
+            </h2>
+            <ul className="flex flex-col gap-3">
+              <li className="border-b-[1px] pb-3">kitchen</li>
+            </ul>
+          </div>
+        </ModalLayout>
+      )}
+      {reviewsModal.isWindowShown && (
+        <ModalLayout closeModal={reviewsModal.hideWindow}>
+          <div className="self-start mt-16 w-full">
+            <h2 className="font-medium text-2xl mb-8 flex items-center">
+              <AiFillStar className="mr-1" /> 5{" "}
+              <span className="ml-3">100 reviews</span>
+            </h2>
+            <div>
+              <Review />
+            </div>
+          </div>
+        </ModalLayout>
+      )}
       <div>
         <h1 className="text-2xl font-semibold">
           NEST Bunnefjorden - Mirrored Glass Cabin
@@ -80,7 +111,10 @@ const SingleResultPage = () => {
           <li>Kitchen</li>
           <li>Kitchen</li>
         </ul>
-        <button className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-5">
+        <button
+          onClick={amenitiesModal.showWindow}
+          className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-5"
+        >
           Show all 40 amenities
         </button>
       </div>
@@ -89,17 +123,11 @@ const SingleResultPage = () => {
         <h2 className="font-semibold text-xl mb-8 flex items-center">
           <AiFillStar /> 100 reviews
         </h2>
-        <div>
-          <div className="flex items-center gap-3">
-            <img className="w-12 h-12 rounded-3xl" src={image} />
-            <div>
-              <h2 className="font-medium">Christor</h2>
-              <p className="text-gray-600">January 2023</p>
-            </div>
-          </div>
-          <p className="mt-4">All great!</p>
-        </div>
-        <button className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-8">
+        <Review />
+        <button
+          onClick={reviewsModal.showWindow}
+          className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-8"
+        >
           Show all 100 reviews
         </button>
       </div>
