@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
   } = useToggleWindow();
 
   return (
-    <footer className="flex justify-between items-center py-2">
+    <footer className="flex justify-between items-center py-4 bg-white border-t-[1px] sticky bottom-0">
       {!isFooterContentShown ? (
         <>
           <div className="flex gap-4">
