@@ -3,15 +3,12 @@ import { TbWorld } from "react-icons/tb";
 import { GoThreeBars } from "react-icons/go";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
-import { MdFilterListAlt } from "react-icons/md";
 import HeaderSearch from "./HeaderSearch";
 import { useToggleWindow } from "../hooks/useWindow";
-import FilterModal from "./FilterModal";
 
 const Header: React.FC = () => {
   const personWindow = useToggleWindow();
   const formWindow = useToggleWindow(true);
-  const filterWindow = useToggleWindow();
 
   useEffect(() => {
     return () => {
@@ -20,10 +17,7 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col">
-      {filterWindow.isWindowShown && (
-        <FilterModal hideModal={filterWindow.hideWindow} />
-      )}
+    <div className="flex flex-col sticky top-0 bg-white z-50">
       <header className="flex items-center justify-between flex-wrap lg:flex-nowrap border-b-[1px] py-4">
         <div className=" flex items-cente">
           <img className="w-8 cursor-pointer" src="/airbnb.png" alt="logo" />
@@ -84,14 +78,6 @@ const Header: React.FC = () => {
           )}
         </div>
       </header>
-      <div
-        onClick={filterWindow.showWindow}
-        className="self-end mt-6 border-[1px] rounded-md p-2 cursor-pointer"
-      >
-        <button className="flex items-center text-md">
-          <MdFilterListAlt className="mr-1" /> Filters
-        </button>
-      </div>
     </div>
   );
 };
