@@ -20,14 +20,6 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
     hotel: false,
   });
 
-  useEffect(() => {
-    document.body.style.overflowY = "hidden";
-
-    return () => {
-      document.body.style.overflowY = "auto";
-    };
-  }, []);
-
   const renderQuantities = (type: keyof typeof rooms) => {
     const arr = [...Array(9).keys()];
 

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { TbWorld } from "react-icons/tb";
 import { GoThreeBars } from "react-icons/go";
 import { BsFillPersonFill } from "react-icons/bs";
@@ -19,12 +20,12 @@ const Header: React.FC = () => {
   return (
     <div className="flex flex-col sticky top-0 bg-white z-50">
       <header className="flex items-center justify-between flex-wrap lg:flex-nowrap border-b-[1px] py-4">
-        <div className=" flex items-cente">
+        <Link to="/" className=" flex items-center">
           <img className="w-8 cursor-pointer" src="/airbnb.png" alt="logo" />
           <h2 className="ml-3 text-red-500 font-bold text-2xl hidden lg:inline-block">
             airbnb
           </h2>
-        </div>
+        </Link>
 
         {!formWindow.isWindowShown ? (
           <div
