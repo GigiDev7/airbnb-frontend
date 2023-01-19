@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { MdOutlinePhotoSizeSelectLarge } from "react-icons/md";
 import { BiBed } from "react-icons/bi";
@@ -7,11 +7,19 @@ import { useToggleWindow } from "../hooks/useWindow";
 import ModalLayout from "../components/ModalLayout";
 import Review from "../components/Review";
 import ImagesSlider from "../components/ImagesSlider";
+import GuestQuantity from "../components/GuestQuantity";
+import { SlArrowDown, SlArrowUp } from "react-icons/sl";
+import { useGuestQuantity } from "../hooks/useGuestQuantity";
+import GuestQuantityBox from "../components/GuestQuantityBox";
 
 const SingleResultPage = () => {
   const amenitiesModal = useToggleWindow();
   const reviewsModal = useToggleWindow();
   const imageSlider = useToggleWindow();
+  const quantityWindow = useToggleWindow();
+
+  const { guestQuantity, decreaseQuantity, increaseQuantity, sumOfQuantities } =
+    useGuestQuantity(1);
 
   return (
     <div className="mt-16 pb-16">
@@ -84,7 +92,7 @@ const SingleResultPage = () => {
             4 guests 2 bedrooms 2 beds 1 bath
           </p>
         </div>
-        <div className="flex flex-col border-2 rounded-xl py-12 px-20 gap-4">
+        <div className="flex flex-col relative border-2 rounded-xl py-12 px-20 gap-4">
           <h2 className="font-semibold text-lg">
             $400 <span className="font-normal">night</span>
           </h2>
@@ -95,7 +103,24 @@ const SingleResultPage = () => {
           <div className="flex flex-col gap-3">
             <input type="date" />
             <input type="date" />
-            <p>guests form</p>
+            <div
+              onClick={quantityWindow.toggleWindow}
+              className="flex items-center justify-between border-[2px] border-black rounded-lg p-2 cursor-pointer"
+            >
+              <div className="flex flex-col ">
+                <h3 className="text-[10px] font-medium">GUESTS</h3>
+                <p>{sumOfQuantities()}</p>
+              </div>
+              {quantityWindow.isWindowShown ? <SlArrowUp /> : <SlArrowDown />}
+            </div>
+            {quantityWindow.isWindowShown && (
+              <GuestQuantityBox
+                data={Object.entries(guestQuantity)}
+                decreaseQuantity={decreaseQuantity}
+                increaseQuantity={increaseQuantity}
+                absoluteTop={275}
+              />
+            )}
             <button className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-lg text-white">
               Reserve
             </button>

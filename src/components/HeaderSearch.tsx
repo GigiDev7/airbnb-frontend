@@ -2,22 +2,20 @@ import React, { MouseEvent, useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import GuestQuantity from "./GuestQuantity";
 import { useToggleWindow } from "../hooks/useWindow";
+import { useGuestQuantity } from "../hooks/useGuestQuantity";
+import GuestQuantityBox from "./GuestQuantityBox";
 
 const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
   showForm,
 }) => {
-  const [guestQuantity, setGuestQuantity] = useState({
-    Adults: { placeholder: "Ages 13 or above", quantity: 0 },
-    Children: { placeholder: "Ages 2-12", quantity: 0 },
-    Infants: { placeholder: "Under 2", quantity: 0 },
-    Pets: { placeholder: "", quantity: 0 },
-  });
-
   const {
     isWindowShown: isQuantityWindowShown,
     hideWindow,
     showWindow,
   } = useToggleWindow(true);
+
+  const { guestQuantity, decreaseQuantity, increaseQuantity, sumOfQuantities } =
+    useGuestQuantity();
 
   const preserveOpenForm = (e: MouseEvent) => {
     showForm(e);
@@ -29,45 +27,6 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
       document.removeEventListener("click", hideWindow);
     };
   }, []);
-
-  const sumOfQuantities = () => {
-    let text = "";
-    const sum =
-      guestQuantity.Adults.quantity +
-      guestQuantity.Children.quantity +
-      guestQuantity.Infants.quantity;
-    if (sum === 0) text = "Add guests";
-    if (sum === 1) text = "1 guest";
-    if (sum > 1) text = `${sum} guests`;
-
-    if (guestQuantity.Pets.quantity === 1) text = `${text}, 1 pet`;
-    if (guestQuantity.Pets.quantity > 1)
-      text = `${text} ${guestQuantity.Pets.quantity} pets`;
-
-    return text;
-  };
-
-  const increaseQuantity = (field: keyof typeof guestQuantity) => {
-    setGuestQuantity((prev) => {
-      return {
-        ...prev,
-        [field]: { ...prev[field], quantity: prev[field].quantity + 1 },
-      };
-    });
-  };
-
-  const decreaseQuantity = (field: keyof typeof guestQuantity) => {
-    setGuestQuantity((prev) => {
-      if (prev[field].quantity == 0) {
-        return { ...prev };
-      }
-
-      return {
-        ...prev,
-        [field]: { ...prev[field], quantity: prev[field].quantity - 1 },
-      };
-    });
-  };
 
   return (
     <form
@@ -101,22 +60,11 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
         <p className="text-gray-400">{sumOfQuantities()}</p>
       </div>
       {isQuantityWindowShown && (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className=" flex flex-col w-96 gap-6 absolute right-0 top-24 lg:top-20 shadow-2xl border-[1px] p-10 rounded-xl z-30 bg-white"
-        >
-          {Object.entries(guestQuantity).map((item, index) => (
-            <GuestQuantity
-              key={item[0]}
-              field={item[0] as keyof typeof guestQuantity}
-              fieldPlaceHolder={item[1].placeholder}
-              quantity={item[1].quantity}
-              last={index == Object.entries(guestQuantity).length - 1}
-              increase={increaseQuantity}
-              decrease={decreaseQuantity}
-            />
-          ))}
-        </div>
+        <GuestQuantityBox
+          data={Object.entries(guestQuantity)}
+          decreaseQuantity={decreaseQuantity}
+          increaseQuantity={increaseQuantity}
+        />
       )}
       <button className="bg-red-500 p-3 rounded-3xl hover:bg-red-600">
         <BiSearch className="text-white" />
