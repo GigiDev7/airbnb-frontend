@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { AiFillStar } from "react-icons/ai";
 import { MdOutlinePhotoSizeSelectLarge } from "react-icons/md";
 import { BiBed } from "react-icons/bi";
@@ -7,7 +7,6 @@ import { useToggleWindow } from "../hooks/useWindow";
 import ModalLayout from "../components/ModalLayout";
 import Review from "../components/Review";
 import ImagesSlider from "../components/ImagesSlider";
-import GuestQuantity from "../components/GuestQuantity";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import { useGuestQuantity } from "../hooks/useGuestQuantity";
 import GuestQuantityBox from "../components/GuestQuantityBox";
