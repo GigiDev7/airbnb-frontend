@@ -6,10 +6,12 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import HeaderSearch from "./HeaderSearch";
 import { useToggleWindow } from "../hooks/useWindow";
+import ModalLayout from "./ModalLayout";
 
 const Header: React.FC = () => {
   const personWindow = useToggleWindow();
   const formWindow = useToggleWindow(true);
+  const languageWindow = useToggleWindow();
 
   useEffect(() => {
     return () => {
@@ -26,6 +28,26 @@ const Header: React.FC = () => {
             airbnb
           </h2>
         </Link>
+
+        {languageWindow.isWindowShown && (
+          <ModalLayout closeModal={languageWindow.hideWindow}>
+            <div className="self-start mt-16">
+              <h2 className="text-2xl font-medium mb-8">
+                Choose a language and region
+              </h2>
+              <div className="flex gap-8">
+                <div className="border-[1px] border-black py-2 px-3 hover:bg-gray-100 cursor-pointer rounded-md">
+                  <h2>English</h2>
+                  <p className="text-gray-500">United States</p>
+                </div>
+                <div className=" py-2 px-3 hover:bg-gray-100 cursor-pointer rounded-md">
+                  <h2>ქართული</h2>
+                  <p className="text-gray-500">საქართველო</p>
+                </div>
+              </div>
+            </div>
+          </ModalLayout>
+        )}
 
         {!formWindow.isWindowShown ? (
           <div
@@ -48,7 +70,10 @@ const Header: React.FC = () => {
         )}
 
         <div className="flex items-center">
-          <div className="mr-4 hover:bg-gray-200 py-2 px-3 rounded-3xl">
+          <div
+            onClick={languageWindow.showWindow}
+            className="mr-4 hover:bg-gray-200 py-2 px-3 rounded-3xl"
+          >
             <TbWorld className="text-xl cursor-pointer" />
           </div>
           <div

@@ -96,12 +96,18 @@ const SingleResultPage = () => {
             $400 <span className="font-normal">night</span>
           </h2>
           <h3 className="flex items-center font-semibold">
-            <AiFillStar /> 5{" "}
+            <AiFillStar /> 5
             <span className="ml-2 text-gray-600 font-medium">100 reviews</span>
           </h3>
           <div className="flex flex-col gap-3">
-            <input type="date" />
-            <input type="date" />
+            <div className="flex flex-col border-[2px] border-black p-2 rounded-md">
+              <label className="font-medium text-sm">check-in</label>
+              <input type="date" />
+            </div>
+            <div className="flex flex-col border-[2px] border-black p-2 rounded-md">
+              <label className="font-medium text-sm">checkout</label>
+              <input type="date" />
+            </div>
             <div
               onClick={quantityWindow.toggleWindow}
               className="flex items-center justify-between border-[2px] border-black rounded-lg p-2 cursor-pointer"
@@ -117,7 +123,7 @@ const SingleResultPage = () => {
                 data={Object.entries(guestQuantity)}
                 decreaseQuantity={decreaseQuantity}
                 increaseQuantity={increaseQuantity}
-                absoluteTop={275}
+                absoluteTop={350}
               />
             )}
             <button className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-lg text-white">
