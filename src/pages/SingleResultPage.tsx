@@ -161,7 +161,8 @@ const SingleResultPage = () => {
 
       <div className="mt-8 border-b-[1px] pb-12 lg:w-4/5 lg:mx-auto">
         <h2 className="font-semibold text-xl mb-8 flex items-center">
-          <AiFillStar /> 100 reviews
+          <AiFillStar />
+          5.0 100 reviews
         </h2>
         <Review />
         <button
