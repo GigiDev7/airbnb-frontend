@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { TbWorld } from "react-icons/tb";
 import { GoThreeBars } from "react-icons/go";
@@ -7,11 +7,19 @@ import { BiSearch } from "react-icons/bi";
 import HeaderSearch from "./HeaderSearch";
 import { useToggleWindow } from "../hooks/useWindow";
 import ModalLayout from "./ModalLayout";
+import AuthFormContext from "../context/authFormContext";
 
 const Header: React.FC = () => {
   const personWindow = useToggleWindow();
   const formWindow = useToggleWindow(true);
   const languageWindow = useToggleWindow();
+
+  const authFormContext = useContext(AuthFormContext);
+
+  const handleFormShow = (type: string) => {
+    authFormContext.showAuthForm(type);
+    personWindow.hideWindow();
+  };
 
   useEffect(() => {
     return () => {
@@ -85,15 +93,18 @@ const Header: React.FC = () => {
           </div>
           {personWindow.isWindowShown && (
             <div className="flex flex-col absolute top-16 right-10 lg:right-20 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-30 bg-white">
-              <a className="pl-4 pr-16 hover:bg-gray-100 py-4" href="#">
+              <button
+                onClick={() => handleFormShow("Register")}
+                className="pl-4 pr-16 hover:bg-gray-100 py-4"
+              >
                 Sign up
-              </a>
-              <a
+              </button>
+              <button
+                onClick={() => handleFormShow("Login")}
                 className="pl-4 pr-16 border-b-[1px]  hover:bg-gray-100 py-4"
-                href="#"
               >
                 Log in
-              </a>
+              </button>
               <a className="pl-4 pr-16 hover:bg-gray-100 py-4" href="#">
                 Host an experience
               </a>

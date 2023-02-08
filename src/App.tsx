@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
 import SingleResultPage from "./pages/SingleResultPage";
 import Root from "./Root";
+import { AuthFormContextProvider } from "./context/authFormContext";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthFormContextProvider>
+      <RouterProvider router={router} />
+    </AuthFormContextProvider>
+  );
 }
 
 export default App;
