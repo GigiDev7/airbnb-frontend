@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext, MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import { TbWorld } from "react-icons/tb";
 import { GoThreeBars } from "react-icons/go";
@@ -16,8 +16,8 @@ const Header: React.FC = () => {
 
   const authFormContext = useContext(AuthFormContext);
 
-  const handleFormShow = (type: string) => {
-    authFormContext.showAuthForm(type);
+  const handleFormShow = (e: MouseEvent, type: string) => {
+    authFormContext.showAuthForm(e, type);
     personWindow.hideWindow();
   };
 
@@ -88,13 +88,13 @@ const Header: React.FC = () => {
           {personWindow.isWindowShown && (
             <div className="flex flex-col absolute top-16 right-10 lg:right-20 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-30 bg-white">
               <button
-                onClick={() => handleFormShow("Register")}
+                onClick={(e) => handleFormShow(e, "Register")}
                 className="pl-4 pr-16 hover:bg-gray-100 py-4"
               >
                 Sign up
               </button>
               <button
-                onClick={() => handleFormShow("Login")}
+                onClick={(e) => handleFormShow(e, "Login")}
                 className="pl-4 pr-16 border-b-[1px]  hover:bg-gray-100 py-4"
               >
                 Log in
