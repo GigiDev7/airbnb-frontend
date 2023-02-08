@@ -17,7 +17,7 @@ const Header: React.FC = () => {
   const authFormContext = useContext(AuthFormContext);
 
   const handleFormShow = (e: MouseEvent, type: string) => {
-    authFormContext.showAuthForm(e, type);
+    authFormContext.showAuthForm(type, e);
     personWindow.hideWindow();
   };
 
@@ -89,13 +89,13 @@ const Header: React.FC = () => {
             <div className="flex flex-col absolute top-16 right-10 lg:right-20 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-30 bg-white">
               <button
                 onClick={(e) => handleFormShow(e, "Register")}
-                className="pl-4 pr-16 hover:bg-gray-100 py-4"
+                className="pl-4 text-start pr-16 hover:bg-gray-100 py-4"
               >
                 Sign up
               </button>
               <button
                 onClick={(e) => handleFormShow(e, "Login")}
-                className="pl-4 pr-16 border-b-[1px]  hover:bg-gray-100 py-4"
+                className="pl-4 text-start pr-16 border-b-[1px]  hover:bg-gray-100 py-4"
               >
                 Log in
               </button>

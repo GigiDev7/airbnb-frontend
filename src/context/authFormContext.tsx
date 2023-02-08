@@ -3,7 +3,7 @@ import { useToggleWindow } from "../hooks/useWindow";
 
 const AuthFormContext = createContext({
   type: "",
-  showAuthForm: (e: MouseEvent, type: string) => {},
+  showAuthForm: (type: string, e?: MouseEvent) => {},
   hideAuthForm: () => {},
 });
 
@@ -21,8 +21,10 @@ export const AuthFormContextProvider = ({
     }
   }, [isWindowShown]);
 
-  const showAuthForm = (e: MouseEvent, type: string) => {
-    showWindow(e);
+  const showAuthForm = (type: string, e?: MouseEvent) => {
+    if (e) {
+      showWindow(e);
+    }
     setAuthForm(type);
   };
 

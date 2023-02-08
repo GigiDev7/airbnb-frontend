@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { Outlet } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { Outlet, useActionData, useFetcher } from "react-router-dom";
 import AuthForm from "./components/AuthForm";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
