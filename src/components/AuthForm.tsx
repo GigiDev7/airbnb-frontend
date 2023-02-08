@@ -1,4 +1,4 @@
-import { useContext, MouseEvent, useEffect, useState } from "react";
+import { useContext, MouseEvent, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useFetcher, useActionData, json } from "react-router-dom";
 import { IoIosCloseCircleOutline } from "react-icons/io";
@@ -12,6 +12,16 @@ const AuthForm: React.FC = () => {
   const authFormContext = useContext(AuthFormContext);
   const fetcher = useFetcher();
   const { data } = fetcher;
+
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  if (wasRegistered) {
+    if (emailRef.current && passwordRef.current) {
+      emailRef.current.value = "";
+      passwordRef.current.value = "";
+    }
+  }
 
   useEffect(() => {
     let timer: number | undefined;
@@ -37,6 +47,10 @@ const AuthForm: React.FC = () => {
   const hideForm = (e: MouseEvent) => {
     e.stopPropagation();
     authFormContext.hideAuthForm();
+  };
+
+  const switchFormType = (type: string, e: MouseEvent) => {
+    authFormContext.showAuthForm(type, e);
   };
 
   return createPortal(
@@ -67,12 +81,14 @@ const AuthForm: React.FC = () => {
           className="flex flex-col w-[85%] gap-3"
         >
           <input
+            ref={emailRef}
             type="text"
             name="email"
             placeholder="Email adress"
             className="border-[1px] border-gray-500 rounded-md w-full py-3 pl-2"
           />
           <input
+            ref={passwordRef}
             name="password"
             type="password"
             placeholder="Password"
@@ -107,6 +123,29 @@ const AuthForm: React.FC = () => {
             {authFormContext.type}
           </button>
         </fetcher.Form>
+        <p className="mt-3">
+          {authFormContext.type === "Login" ? (
+            <button>
+              Don't have an account?
+              <span
+                onClick={(e) => switchFormType("Register", e)}
+                className="font-semibold"
+              >
+                Register
+              </span>
+            </button>
+          ) : (
+            <button>
+              Already have an account?{" "}
+              <span
+                onClick={(e) => switchFormType("Login", e)}
+                className="font-semibold"
+              >
+                Login
+              </span>
+            </button>
+          )}
+        </p>
       </div>
     </>,
     document.getElementById("auth-modal") as Element
