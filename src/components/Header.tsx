@@ -21,12 +21,6 @@ const Header: React.FC = () => {
     personWindow.hideWindow();
   };
 
-  useEffect(() => {
-    return () => {
-      document.removeEventListener("click", formWindow.hideWindow);
-    };
-  }, []);
-
   return (
     <div className="flex flex-col sticky top-0 bg-white z-50">
       <header className="flex items-center justify-between flex-wrap lg:flex-nowrap border-b-[1px] py-4">

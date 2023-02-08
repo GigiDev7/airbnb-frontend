@@ -22,12 +22,6 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
     hideWindow();
   };
 
-  useEffect(() => {
-    return () => {
-      document.removeEventListener("click", hideWindow);
-    };
-  }, []);
-
   return (
     <form
       onClick={(e) => preserveOpenForm(e)}

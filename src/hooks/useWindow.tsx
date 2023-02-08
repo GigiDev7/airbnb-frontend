@@ -1,7 +1,15 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useState, useEffect } from "react";
 
 export const useToggleWindow = (setDocumentListener = false) => {
   const [isWindowShown, setIsWindowShown] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (setDocumentListener) {
+        document.removeEventListener("click", hideWindow);
+      }
+    };
+  }, []);
 
   const showWindow = (e: MouseEvent) => {
     if (setDocumentListener) {
