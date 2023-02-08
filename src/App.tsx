@@ -7,7 +7,7 @@ import SingleResultPage from "./pages/SingleResultPage";
 
 function App() {
   return (
-    <>
+    <div className="flex flex-col justify-between h-screen">
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -15,7 +15,7 @@ function App() {
         <Route path="/property/:id" element={<SingleResultPage />} />
       </Routes>
       <Footer />
-    </>
+    </div>
   );
 }
 
