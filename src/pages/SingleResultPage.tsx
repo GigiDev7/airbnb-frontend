@@ -21,7 +21,7 @@ const SingleResultPage = () => {
     useGuestQuantity(1);
 
   return (
-    <div className="mt-16 pb-16">
+    <div className="mt-28 pb-16">
       {amenitiesModal.isWindowShown && (
         <ModalLayout closeModal={amenitiesModal.hideWindow}>
           <div className="self-start mt-16 w-full">
