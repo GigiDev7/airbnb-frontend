@@ -8,6 +8,7 @@ import HeaderSearch from "./HeaderSearch";
 import { useToggleWindow } from "../hooks/useWindow";
 import ModalLayout from "./ModalLayout";
 import AuthFormContext from "../context/authFormContext";
+import AuthUserContext from "../context/authUserContext";
 
 const Header: React.FC = () => {
   const personWindow = useToggleWindow();
@@ -15,10 +16,16 @@ const Header: React.FC = () => {
   const languageWindow = useToggleWindow();
 
   const authFormContext = useContext(AuthFormContext);
+  const authUserContext = useContext(AuthUserContext);
 
   const handleFormShow = (e: MouseEvent, type: string) => {
     authFormContext.showAuthForm(type, e);
     personWindow.hideWindow();
+  };
+
+  const logoutHandler = () => {
+    localStorage.removeItem("user");
+    authUserContext.updateUser(null);
   };
 
   return (
@@ -87,18 +94,29 @@ const Header: React.FC = () => {
           </div>
           {personWindow.isWindowShown && (
             <div className="flex flex-col absolute top-16 right-10 lg:right-20 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-30 bg-white">
-              <button
-                onClick={(e) => handleFormShow(e, "Register")}
-                className="pl-4 text-start pr-16 hover:bg-gray-100 py-4"
-              >
-                Sign up
-              </button>
-              <button
-                onClick={(e) => handleFormShow(e, "Login")}
-                className="pl-4 text-start pr-16 border-b-[1px]  hover:bg-gray-100 py-4"
-              >
-                Log in
-              </button>
+              {!authUserContext.user ? (
+                <>
+                  <button
+                    onClick={(e) => handleFormShow(e, "Register")}
+                    className="pl-4 text-start pr-16 hover:bg-gray-100 py-4"
+                  >
+                    Sign up
+                  </button>
+                  <button
+                    onClick={(e) => handleFormShow(e, "Login")}
+                    className="pl-4 text-start pr-16 border-b-[1px]  hover:bg-gray-100 py-4"
+                  >
+                    Log in
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={logoutHandler}
+                  className="pl-4 text-start pr-16 border-b-[1px]  hover:bg-gray-100 py-4"
+                >
+                  Logout
+                </button>
+              )}
               <a className="pl-4 pr-16 hover:bg-gray-100 py-4" href="#">
                 Host an experience
               </a>

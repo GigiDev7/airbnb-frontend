@@ -6,9 +6,11 @@ import AuthFormContext from "../context/authFormContext";
 import axios from "axios";
 import { BASE_URL } from "../config";
 import { catchError } from "../utils/httpErrorHelper";
+import AuthUserContext from "../context/authUserContext";
 
 const AuthForm: React.FC = () => {
   const [wasRegistered, setWasRegistered] = useState(false);
+  const authUserContext = useContext(AuthUserContext);
   const authFormContext = useContext(AuthFormContext);
   const fetcher = useFetcher();
   const { data } = fetcher;
@@ -34,6 +36,7 @@ const AuthForm: React.FC = () => {
     }
     if (data && !data.isError && authFormContext.type === "Login") {
       localStorage.setItem("user", JSON.stringify(data.user));
+      authUserContext.updateUser(data.user);
       authFormContext.hideAuthForm();
     }
 

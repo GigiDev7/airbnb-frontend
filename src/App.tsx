@@ -4,6 +4,7 @@ import SearchResults from "./pages/SearchResults";
 import SingleResultPage from "./pages/SingleResultPage";
 import Root from "./Root";
 import { AuthFormContextProvider } from "./context/authFormContext";
+import { AuthUserContextProvider } from "./context/authUserContext";
 import { action as authAction } from "./components/AuthForm";
 
 const router = createBrowserRouter([
@@ -21,9 +22,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <AuthFormContextProvider>
-      <RouterProvider router={router} />
-    </AuthFormContextProvider>
+    <AuthUserContextProvider>
+      <AuthFormContextProvider>
+        <RouterProvider router={router} />
+      </AuthFormContextProvider>
+    </AuthUserContextProvider>
   );
 }
 
