@@ -110,12 +110,17 @@ const Header: React.FC = () => {
                   </button>
                 </>
               ) : (
-                <button
-                  onClick={logoutHandler}
-                  className="pl-4 text-start pr-16 border-b-[1px]  hover:bg-gray-100 py-4"
-                >
-                  Logout
-                </button>
+                <>
+                  <button className="pl-4 text-start pr-16 hover:bg-gray-100 py-4">
+                    Profile
+                  </button>
+                  <button
+                    onClick={logoutHandler}
+                    className="pl-4 text-start pr-16 border-b-[1px]  hover:bg-gray-100 py-4"
+                  >
+                    Logout
+                  </button>
+                </>
               )}
               <a className="pl-4 pr-16 hover:bg-gray-100 py-4" href="#">
                 Host an experience
