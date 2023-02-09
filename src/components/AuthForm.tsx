@@ -120,10 +120,13 @@ const AuthForm: React.FC = () => {
             </>
           )}
           <button
+            disabled={fetcher.state === "submitting"}
             type="submit"
             className="w-full bg-red-500 rounded-md py-3 text-white hover:bg-red-600"
           >
-            {authFormContext.type}
+            {fetcher.state === "submitting"
+              ? "Submitting..."
+              : authFormContext.type}
           </button>
         </fetcher.Form>
         <p className="mt-3">
@@ -139,7 +142,7 @@ const AuthForm: React.FC = () => {
             </button>
           ) : (
             <button>
-              Already have an account?{" "}
+              Already have an account?
               <span
                 onClick={(e) => switchFormType("Login", e)}
                 className="font-semibold"
