@@ -29,7 +29,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col sticky top-0 bg-white z-50">
+    <div className="flex flex-col fixed w-[90%] top-0 bg-white z-50">
       <header className="flex items-center justify-between flex-wrap lg:flex-nowrap border-b-[1px] py-4">
         <Link to="/" className=" flex items-center">
           <img className="w-8 cursor-pointer" src="/airbnb.png" alt="logo" />

@@ -8,6 +8,25 @@ export const useGuestQuantity = (adults: number = 0) => {
     Pets: { placeholder: "", quantity: 0 },
   });
 
+  const updateQuantity = ({
+    adults,
+    children,
+    infants,
+    pets,
+  }: {
+    adults: number;
+    children: number;
+    infants: number;
+    pets: number;
+  }) => {
+    setGuestQuantity({
+      Adults: { placeholder: "Ages 13 or above", quantity: adults },
+      Children: { placeholder: "Ages 2-12", quantity: children },
+      Infants: { placeholder: "Under 2", quantity: infants },
+      Pets: { placeholder: "", quantity: pets },
+    });
+  };
+
   const increaseQuantity = (field: keyof typeof guestQuantity) => {
     setGuestQuantity((prev) => {
       return {
@@ -47,5 +66,11 @@ export const useGuestQuantity = (adults: number = 0) => {
     return text;
   };
 
-  return { guestQuantity, decreaseQuantity, increaseQuantity, sumOfQuantities };
+  return {
+    guestQuantity,
+    decreaseQuantity,
+    increaseQuantity,
+    sumOfQuantities,
+    updateQuantity,
+  };
 };

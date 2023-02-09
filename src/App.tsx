@@ -6,6 +6,8 @@ import Root from "./Root";
 import { AuthFormContextProvider } from "./context/authFormContext";
 import { AuthUserContextProvider } from "./context/authUserContext";
 import { action as authAction } from "./components/AuthForm";
+import { action as searchAction } from "./components/HeaderSearch";
+import { loader as propertiesLoader } from "./pages/SearchResults";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +16,12 @@ const router = createBrowserRouter([
     action: authAction,
     children: [
       { index: true, element: <Home /> },
-      { path: "property", element: <SearchResults /> },
+      {
+        path: "property",
+        element: <SearchResults />,
+        loader: propertiesLoader,
+        action: searchAction,
+      },
       { path: "property/:propertyId", element: <SingleResultPage /> },
     ],
   },
