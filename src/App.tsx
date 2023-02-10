@@ -9,12 +9,14 @@ import { action as authAction } from "./components/AuthForm";
 import { action as searchAction } from "./components/HeaderSearch";
 import { loader as propertiesLoader } from "./pages/SearchResults";
 import { loader as propertyLoader } from "./pages/SingleResultPage";
+import ErrorPage from "./components/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     action: authAction,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
       {
