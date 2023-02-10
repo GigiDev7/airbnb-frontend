@@ -5,9 +5,11 @@ import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 import { IProperty } from "../interfaces";
 import { BASE_URL } from "../config";
 import { useImageSlide } from "../hooks/useImageSlide";
+import { useLocation } from "react-router-dom";
 
 const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
   const { imageIndex, changeImageIndex } = useImageSlide(property.images);
+  const location = useLocation();
 
   const handleImageChange = (e: MouseEvent, type: "prev" | "next") => {
     e.stopPropagation();
@@ -17,7 +19,7 @@ const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
 
   return (
     <Link
-      to={`/property/${property._id}`}
+      to={`/property/${property._id}${location.search}`}
       target="_blank"
       className="flex flex-col  w-1/3 lg:w-1/5 relative icon-container"
     >

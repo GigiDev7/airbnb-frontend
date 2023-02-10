@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useEffect, useState, ChangeEvent } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { MdOutlinePhotoSizeSelectLarge } from "react-icons/md";
 import { BiBed } from "react-icons/bi";
@@ -9,11 +9,12 @@ import ImagesSlider from "../components/ImagesSlider";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import { useGuestQuantity } from "../hooks/useGuestQuantity";
 import GuestQuantityBox from "../components/GuestQuantityBox";
-import { defer, Await, useLoaderData } from "react-router-dom";
+import { defer, Await, useLoaderData, useLocation } from "react-router-dom";
 import { catchError } from "../utils/httpErrorHelper";
 import axios from "axios";
 import { BASE_URL } from "../config";
 import { IProperty } from "../interfaces";
+import { calcDaysBetweenDates } from "../utils/calcDaysBetweenDates";
 
 const SingleResultPage = () => {
   const amenitiesModal = useToggleWindow();
@@ -22,9 +23,52 @@ const SingleResultPage = () => {
   const quantityWindow = useToggleWindow();
 
   const data: any = useLoaderData();
+  const location = useLocation();
+  const [reserveDates, setReserverDates] = useState({
+    checkIn: "",
+    checkOut: "",
+  });
 
-  const { guestQuantity, decreaseQuantity, increaseQuantity, sumOfQuantities } =
-    useGuestQuantity(1);
+  const differenceBetweenDates = calcDaysBetweenDates(
+    new Date(reserveDates.checkIn),
+    new Date(reserveDates.checkOut)
+  );
+
+  const handleDateChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    type: keyof typeof reserveDates
+  ) => {
+    setReserverDates((prev) => {
+      return { ...prev, [type]: e.target.value };
+    });
+  };
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const checkIn = searchParams.get("checkIn");
+    const checkOut = searchParams.get("checkOut");
+    const adults = searchParams.get("adults");
+    const children = searchParams.get("children");
+    const infants = searchParams.get("infants");
+    const pets = searchParams.get("pets");
+    if (checkIn && checkOut) {
+      setReserverDates({ checkIn, checkOut });
+    }
+    updateQuantity({
+      adults: adults ? +adults : 0,
+      children: children ? +children : 0,
+      infants: infants ? +infants : 0,
+      pets: pets ? +pets : 0,
+    });
+  }, []);
+
+  const {
+    guestQuantity,
+    decreaseQuantity,
+    increaseQuantity,
+    updateQuantity,
+    sumOfQuantities,
+  } = useGuestQuantity(1);
 
   return (
     <Suspense
@@ -125,11 +169,19 @@ const SingleResultPage = () => {
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-col border-[2px] border-black p-2 rounded-md">
                     <label className="font-medium text-sm">check-in</label>
-                    <input type="date" />
+                    <input
+                      onChange={(e) => handleDateChange(e, "checkIn")}
+                      value={reserveDates.checkIn}
+                      type="date"
+                    />
                   </div>
                   <div className="flex flex-col border-[2px] border-black p-2 rounded-md">
                     <label className="font-medium text-sm">checkout</label>
-                    <input type="date" />
+                    <input
+                      onChange={(e) => handleDateChange(e, "checkIn")}
+                      value={reserveDates.checkOut}
+                      type="date"
+                    />
                   </div>
                   <div
                     onClick={quantityWindow.toggleWindow}
@@ -160,7 +212,9 @@ const SingleResultPage = () => {
                   </button>
                 </div>
                 <p className="border-t-2 pt-4 font-medium text-center">
-                  Total $2000
+                  Total{" "}
+                  {differenceBetweenDates &&
+                    differenceBetweenDates * property.price}
                 </p>
               </div>
             </div>
@@ -225,7 +279,6 @@ const SingleResultPage = () => {
 async function getProperty(url: string) {
   try {
     const { data } = await axios.get(url);
-    console.log(data);
     return data;
   } catch (error) {
     return catchError(error);
