@@ -4,26 +4,15 @@ import { AiFillStar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 import { IProperty } from "../interfaces";
 import { BASE_URL } from "../config";
+import { useImageSlide } from "../hooks/useImageSlide";
 
 const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
-  const [imageIndex, setImageIndex] = useState(0);
+  const { imageIndex, changeImageIndex } = useImageSlide(property.images);
 
   const handleImageChange = (e: MouseEvent, type: "prev" | "next") => {
     e.stopPropagation();
     e.preventDefault();
-    if (type === "prev") {
-      if (imageIndex === 0) {
-        setImageIndex(property.images.length - 1);
-      } else {
-        setImageIndex((prev) => (prev -= 1));
-      }
-    } else {
-      if (imageIndex === property.images.length - 1) {
-        setImageIndex(0);
-      } else {
-        setImageIndex((prev) => (prev += 1));
-      }
-    }
+    changeImageIndex(type);
   };
 
   return (

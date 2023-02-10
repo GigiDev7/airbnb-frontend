@@ -1,9 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsArrowRightCircle, BsArrowLeftCircle } from "react-icons/bs";
-import image from "/home.webp";
+import { BASE_URL } from "../config";
+import { useImageSlide } from "../hooks/useImageSlide";
 
-const ImagesSlider: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
+const ImagesSlider: React.FC<{ closeModal: () => void; images: string[] }> = ({
+  closeModal,
+  images,
+}) => {
+  const { imageIndex, changeImageIndex } = useImageSlide(images);
+
   useEffect(() => {
     document.body.style.overflowY = "hidden";
 
@@ -19,16 +25,24 @@ const ImagesSlider: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
         <button onClick={closeModal} className="text-white flex items-center">
           <AiOutlineClose className="mr-2" /> Close
         </button>
-        <p className="text-white">1/25</p>
+        <p className="text-white">
+          {imageIndex + 1}/{images.length}
+        </p>
       </div>
       <div className="z-50 fixed right-20 top-1/2">
-        <BsArrowRightCircle className="text-white text-4xl cursor-pointer" />
+        <BsArrowRightCircle
+          onClick={() => changeImageIndex("next")}
+          className="text-white text-4xl cursor-pointer"
+        />
       </div>
       <div className="z-50 fixed left-20 top-1/2">
-        <BsArrowLeftCircle className="text-white text-4xl cursor-pointer" />
+        <BsArrowLeftCircle
+          onClick={() => changeImageIndex("prev")}
+          className="text-white text-4xl cursor-pointer"
+        />
       </div>
       <div className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-        <img className="h-[500px]" src={image} />
+        <img className="h-[500px]" src={`${BASE_URL}/${images[imageIndex]}`} />
       </div>
     </>
   );

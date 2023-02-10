@@ -8,6 +8,7 @@ import { AuthUserContextProvider } from "./context/authUserContext";
 import { action as authAction } from "./components/AuthForm";
 import { action as searchAction } from "./components/HeaderSearch";
 import { loader as propertiesLoader } from "./pages/SearchResults";
+import { loader as propertyLoader } from "./pages/SingleResultPage";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,11 @@ const router = createBrowserRouter([
         loader: propertiesLoader,
         action: searchAction,
       },
-      { path: "property/:propertyId", element: <SingleResultPage /> },
+      {
+        path: "property/:propertyId",
+        loader: propertyLoader,
+        element: <SingleResultPage />,
+      },
     ],
   },
 ]);
