@@ -1,12 +1,5 @@
 import { createContext, useState } from "react";
-
-interface IUser {
-  _id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  token: string;
-}
+import { ICreatedBy as IUser } from "../interfaces";
 
 const AuthUserContext = createContext<{
   user: null | IUser;

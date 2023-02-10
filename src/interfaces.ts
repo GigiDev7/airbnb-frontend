@@ -4,6 +4,7 @@ export interface ICreatedBy {
   firstname: string;
   lastname: string;
   image: string;
+  favourites: string[];
 }
 
 export interface IRating {

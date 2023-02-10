@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent } from "react";
+import React, { MouseEvent, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AiFillStar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
@@ -6,10 +6,13 @@ import { IProperty } from "../interfaces";
 import { BASE_URL } from "../config";
 import { useImageSlide } from "../hooks/useImageSlide";
 import { useLocation } from "react-router-dom";
+import AuthUserContext from "../context/authUserContext";
 
 const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
   const { imageIndex, changeImageIndex } = useImageSlide(property.images);
   const location = useLocation();
+
+  const userContext = useContext(AuthUserContext);
 
   const handleImageChange = (e: MouseEvent, type: "prev" | "next") => {
     e.stopPropagation();
@@ -33,7 +36,12 @@ const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
           className="text-black text-3xl cursor-pointer arrow-icon"
         />
       </div>
-      <AiOutlineHeart className="absolute right-2 top-2 text-2xl" />
+      {userContext.user &&
+      userContext.user.favourites.includes(property._id) ? (
+        <AiFillHeart className="absolute right-2 top-2 text-2xl" />
+      ) : (
+        <AiOutlineHeart className="absolute right-2 top-2 text-2xl" />
+      )}
 
       <img
         className="rounded-lg w-[28rem] h-96"
