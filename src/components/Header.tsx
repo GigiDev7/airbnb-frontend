@@ -25,6 +25,7 @@ const Header: React.FC = () => {
 
   const logoutHandler = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     authUserContext.updateUser(null);
   };
 

@@ -36,6 +36,7 @@ const AuthForm: React.FC = () => {
     }
     if (data && !data.isError && authFormContext.type === "Login") {
       localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
       authUserContext.updateUser(data.user);
       authFormContext.hideAuthForm();
     }
@@ -177,7 +178,7 @@ export async function action({ request }: { request: any }) {
         email,
         password,
       });
-      return { isError: false, user: data };
+      return { isError: false, user: data.user, token: data.token };
     } catch (err: any) {
       return catchError(err);
     }

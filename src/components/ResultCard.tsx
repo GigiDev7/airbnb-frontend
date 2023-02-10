@@ -7,6 +7,7 @@ import { BASE_URL } from "../config";
 import { useImageSlide } from "../hooks/useImageSlide";
 import { useLocation } from "react-router-dom";
 import AuthUserContext from "../context/authUserContext";
+import axios from "axios";
 
 const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
   const { imageIndex, changeImageIndex } = useImageSlide(property.images);
@@ -18,6 +19,31 @@ const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
     e.stopPropagation();
     e.preventDefault();
     changeImageIndex(type);
+  };
+
+  const handleFavourProperty = async (
+    e: MouseEvent,
+    type: "add" | "remove"
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (userContext.user) {
+      const token = localStorage.getItem("token");
+      try {
+        const { data } = await axios.request({
+          url: `${BASE_URL}/favourites`,
+          method: type === "add" ? "POST" : "PATCH",
+          data: { propertyId: property._id },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        userContext.updateUser(data);
+        localStorage.setItem("user", JSON.stringify(data));
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -38,9 +64,15 @@ const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
       </div>
       {userContext.user &&
       userContext.user.favourites.includes(property._id) ? (
-        <AiFillHeart className="absolute right-2 top-2 text-2xl" />
+        <AiFillHeart
+          onClick={(e) => handleFavourProperty(e, "remove")}
+          className="absolute right-2 top-2 text-2xl"
+        />
       ) : (
-        <AiOutlineHeart className="absolute right-2 top-2 text-2xl" />
+        <AiOutlineHeart
+          onClick={(e) => handleFavourProperty(e, "add")}
+          className="absolute right-2 top-2 text-2xl"
+        />
       )}
 
       <img
