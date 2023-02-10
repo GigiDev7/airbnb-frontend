@@ -16,6 +16,8 @@ export interface IReview {
   review: string;
   _id: string;
   user: ICreatedBy;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IProperty {

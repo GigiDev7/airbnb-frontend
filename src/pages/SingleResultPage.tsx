@@ -13,6 +13,7 @@ import { defer, Await, useLoaderData } from "react-router-dom";
 import { catchError } from "../utils/httpErrorHelper";
 import axios from "axios";
 import { BASE_URL } from "../config";
+import { IProperty } from "../interfaces";
 
 const SingleResultPage = () => {
   const amenitiesModal = useToggleWindow();
@@ -30,7 +31,7 @@ const SingleResultPage = () => {
       fallback={<p className="text-center mt-28 font-medum">Loading...</p>}
     >
       <Await resolve={data.property}>
-        {(property) => (
+        {(property: IProperty) => (
           <div className="mt-28 pb-16">
             {amenitiesModal.isWindowShown && (
               <ModalLayout closeModal={amenitiesModal.hideWindow}>
@@ -39,7 +40,11 @@ const SingleResultPage = () => {
                     What this place offers
                   </h2>
                   <ul className="flex flex-col gap-3">
-                    <li className="border-b-[1px] pb-3">kitchen</li>
+                    {property.amenities.map((item) => (
+                      <li key={item} className="border-b-[1px] pb-3">
+                        {item}
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </ModalLayout>
@@ -48,12 +53,16 @@ const SingleResultPage = () => {
               <ModalLayout closeModal={reviewsModal.hideWindow}>
                 <div className="self-start mt-16 w-full">
                   <h2 className="font-medium text-2xl mb-8 flex items-center">
-                    <AiFillStar className="mr-1" /> 5{" "}
-                    <span className="ml-3">100 reviews</span>
+                    <AiFillStar className="mr-1" /> {property.avgRating}
+                    <span className="ml-3">
+                      {property.reviews.length} reviews
+                    </span>
                   </h2>
-                  <div>
-                    <Review />
-                  </div>
+                  {property.reviews.map((review) => (
+                    <div key={review._id}>
+                      <Review review={review} />
+                    </div>
+                  ))}
                 </div>
               </ModalLayout>
             )}
@@ -78,13 +87,11 @@ const SingleResultPage = () => {
 
             <div className="flex justify-center gap-8 lg:gap-4 mt-5 relative">
               <img
-                onClick={imageSlider.showWindow}
-                className="w-2/5 lg:h-80 lg:w-1/3 rounded-l-xl hover:opacity-[0.9] cursor-pointer"
+                className="w-2/5 h-80 lg:w-1/4 rounded-l-xl"
                 src={`${BASE_URL}/${property.images[0]}`}
               />
               <img
-                onClick={imageSlider.showWindow}
-                className="w-2/5 lg:h-80 lg:w-1/3 rounded-r-xl hover:opacity-[0.9] cursor-pointer"
+                className="w-2/5 h-80 lg:w-1/4 rounded-r-xl"
                 src={`${BASE_URL}/${property.images[1]}`}
               />
               <button
@@ -139,12 +146,14 @@ const SingleResultPage = () => {
                     )}
                   </div>
                   {quantityWindow.isWindowShown && (
-                    <GuestQuantityBox
-                      data={Object.entries(guestQuantity)}
-                      decreaseQuantity={decreaseQuantity}
-                      increaseQuantity={increaseQuantity}
-                      absoluteTop={350}
-                    />
+                    <div>
+                      <GuestQuantityBox
+                        data={Object.entries(guestQuantity)}
+                        decreaseQuantity={decreaseQuantity}
+                        increaseQuantity={increaseQuantity}
+                        absoluteTop={100}
+                      />
+                    </div>
                   )}
                   <button className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-lg text-white">
                     Reserve
@@ -158,10 +167,19 @@ const SingleResultPage = () => {
 
             <div className="mt-8 border-b-[1px] pb-12 lg:w-4/5 lg:mx-auto">
               <h2 className="font-semibold text-xl mb-4">Where you'll sleep</h2>
-              <div className="border-[1px] pl-4 py-4 w-fit pr-8 rounded-xl flex flex-col gap-3">
-                <BiBed />
-                <h3 className="font-medium">Bedroom 1</h3>
-                <p className="text-gray-600">1 queen bed</p>
+              <div className="flex gap-6">
+                {[...Array(property.rooms.bedrooms).keys()].map(
+                  (item, index) => (
+                    <div
+                      key={index}
+                      className="border-[1px] pl-4 py-4 w-fit pr-8 rounded-xl flex flex-col gap-3"
+                    >
+                      <BiBed />
+                      <h3 className="font-medium">Bedroom {item + 1}</h3>
+                      <p className="text-gray-600">1 queen bed</p>
+                    </div>
+                  )
+                )}
               </div>
             </div>
 
@@ -170,10 +188,9 @@ const SingleResultPage = () => {
                 What this place offers
               </h2>
               <ul>
-                <li>Kitchen</li>
-                <li>Kitchen</li>
-                <li>Kitchen</li>
-                <li>Kitchen</li>
+                {property.amenities.slice(0, 8).map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
               </ul>
               <button
                 onClick={amenitiesModal.showWindow}
@@ -188,7 +205,9 @@ const SingleResultPage = () => {
                 <AiFillStar />
                 {property.avgRating} - {property.reviews.length} reviews
               </h2>
-              <Review />
+              {property.reviews.slice(0, 5).map((review) => (
+                <Review key={review._id} review={review} />
+              ))}
               <button
                 onClick={reviewsModal.showWindow}
                 className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-8"
