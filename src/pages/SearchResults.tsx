@@ -8,6 +8,7 @@ import { BASE_URL } from "../config";
 import { catchError } from "../utils/httpErrorHelper";
 import { defer, useLoaderData, Await } from "react-router-dom";
 import { IProperty } from "../interfaces";
+import { calculateGuestsFromParams } from "../utils/queryParamsHelper";
 
 const SearchResults: React.FC = () => {
   const filterWindow = useToggleWindow();
@@ -82,22 +83,9 @@ async function getProperties(url: string) {
 
 export function loader({ request }: { request: any }) {
   const index = request.url.indexOf("?");
-  const searchParams = new URLSearchParams(request.url.slice(index));
-  const adults = searchParams.get("adults");
-  const children = searchParams.get("children");
-  const infants = searchParams.get("infants");
-  const pets = searchParams.get("pets");
-  let guests = 0;
-  if (adults) guests += +adults;
-  if (children) guests += +children;
-  if (infants) guests += +infants;
-  searchParams.delete("adults");
-  searchParams.delete("children");
-  searchParams.delete("infants");
-  searchParams.delete("pets");
-  searchParams.append("guests", guests.toString());
+  const searchParams = calculateGuestsFromParams(request.url.slice(index));
 
-  const url = `${BASE_URL}/property?${searchParams.toString()}`;
+  const url = `${BASE_URL}/property?${searchParams}`;
 
   return defer({
     properties: getProperties(url),

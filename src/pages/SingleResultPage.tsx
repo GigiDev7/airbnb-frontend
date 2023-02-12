@@ -215,6 +215,7 @@ const SingleResultPage = () => {
                   Total{" "}
                   {differenceBetweenDates &&
                     differenceBetweenDates * property.price}
+                  $
                 </p>
               </div>
             </div>

@@ -21,7 +21,7 @@ const ModalLayout: React.FC<{
           onClick={closeModal}
           className="absolute left-5 top-5 cursor-pointer text-xl"
         />
-        <div className="overflow-y-auto">{children}</div>
+        <div className="overflow-y-auto px-3">{children}</div>
       </div>
     </>
   );

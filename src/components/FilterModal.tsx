@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import ModalLayout from "./ModalLayout";
 import { BsHouseDoor } from "react-icons/bs";
 import { BiBuildingHouse } from "react-icons/bi";
 import { GiFamilyHouse } from "react-icons/gi";
 import { FaHotel } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  extractDataFromQueryParamsFilter,
+  queryParamsFilterHelper,
+} from "../utils/queryParamsHelper";
 
 const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
   const [priceRange, setPriceRange] = useState({ minPrice: 0, maxPrice: 0 });
@@ -19,6 +24,29 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
     guesthouse: false,
     hotel: false,
   });
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const result = extractDataFromQueryParamsFilter(location.search);
+    setPriceRange(result.priceRange);
+    setTypeOfPlace(result.typeOfPlace);
+    setPropertyType(result.propertyType);
+    setRooms(result.rooms);
+  }, []);
+
+  const handleFilter = () => {
+    const searchParams = queryParamsFilterHelper(location.search, {
+      priceRange,
+      propertyType,
+      typeOfPlace,
+      rooms,
+    });
+
+    hideModal();
+    navigate(`/property?${searchParams}`);
+  };
 
   const renderQuantities = (type: keyof typeof rooms) => {
     const arr = [...Array(9).keys()];
@@ -240,7 +268,10 @@ const FilterModal: React.FC<{ hideModal: () => void }> = ({ hideModal }) => {
         >
           Clear all
         </button>
-        <button className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-900">
+        <button
+          onClick={handleFilter}
+          className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-900"
+        >
           Filter
         </button>
       </div>

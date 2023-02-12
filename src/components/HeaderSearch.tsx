@@ -4,6 +4,7 @@ import { useToggleWindow } from "../hooks/useWindow";
 import { useGuestQuantity } from "../hooks/useGuestQuantity";
 import GuestQuantityBox from "./GuestQuantityBox";
 import { redirect, useSubmit, useLocation } from "react-router-dom";
+import { capitalize } from "../utils/capitalize";
 
 const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
   showForm,
@@ -179,7 +180,7 @@ export async function action({ request }: { request: any }) {
   const { Adults, Children, Infants, Pets } = guests;
 
   const params = new URLSearchParams();
-  params.append("city", destination);
+  params.append("city", capitalize(destination.toLowerCase()));
   params.append("checkIn", checkIn);
   params.append("checkOut", checkOut);
   params.append("adults", Adults);
