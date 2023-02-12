@@ -94,7 +94,7 @@ const Header: React.FC = () => {
             <BsFillPersonFill className="text-xl" />
           </div>
           {personWindow.isWindowShown && (
-            <div className="flex flex-col absolute top-16 right-10 lg:right-20 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-30 bg-white">
+            <div className="flex flex-col absolute top-16 right-0 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-30 bg-white">
               {!authUserContext.user ? (
                 <>
                   <button
@@ -115,6 +115,12 @@ const Header: React.FC = () => {
                   <button className="pl-4 text-start pr-16 hover:bg-gray-100 py-4">
                     Profile
                   </button>
+                  <Link
+                    to="/favourites"
+                    className="pl-4 text-start pr-16 hover:bg-gray-100 py-4"
+                  >
+                    Favourites
+                  </Link>
                   <button
                     onClick={logoutHandler}
                     className="pl-4 text-start pr-16 border-b-[1px]  hover:bg-gray-100 py-4"

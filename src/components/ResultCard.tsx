@@ -8,8 +8,10 @@ import { useImageSlide } from "../hooks/useImageSlide";
 import { useLocation } from "react-router-dom";
 import AuthUserContext from "../context/authUserContext";
 import axios from "axios";
+import AuthFormContext from "../context/authFormContext";
 
 const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
+  const authFormContext = useContext(AuthFormContext);
   const { imageIndex, changeImageIndex } = useImageSlide(property.images);
   const location = useLocation();
 
@@ -43,6 +45,8 @@ const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
       } catch (error) {
         console.log(error);
       }
+    } else {
+      authFormContext.showAuthForm("Login");
     }
   };
 

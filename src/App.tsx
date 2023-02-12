@@ -10,6 +10,9 @@ import { action as searchAction } from "./components/HeaderSearch";
 import { loader as propertiesLoader } from "./pages/SearchResults";
 import { loader as propertyLoader } from "./pages/SingleResultPage";
 import ErrorPage from "./components/ErrorPage";
+import Favourites from "./pages/Favourites";
+import { loader as favouritesLoader } from "./pages/Favourites";
+import ProtectRoute from "./ProtectRoute";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +32,15 @@ const router = createBrowserRouter([
         path: "property/:propertyId",
         loader: propertyLoader,
         element: <SingleResultPage />,
+      },
+      {
+        path: "favourites",
+        element: (
+          <ProtectRoute>
+            <Favourites />
+          </ProtectRoute>
+        ),
+        loader: favouritesLoader,
       },
     ],
   },
