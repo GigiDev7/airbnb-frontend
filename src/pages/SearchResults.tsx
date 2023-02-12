@@ -42,7 +42,7 @@ const SearchResults: React.FC = () => {
             )}
             <div
               onClick={filterWindow.showWindow}
-              className="mt-12 border-[1px] rounded-md p-2 cursor-pointer w-fit self-end fixed top-30 z-50 bg-white"
+              className="mt-12 border-[1px] rounded-md p-2 cursor-pointer w-fit self-end fixed top-30 z-40 bg-white"
             >
               <button className="flex items-center text-md">
                 <MdFilterListAlt className="mr-1" /> Filters

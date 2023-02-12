@@ -94,7 +94,7 @@ const Header: React.FC = () => {
             <BsFillPersonFill className="text-xl" />
           </div>
           {personWindow.isWindowShown && (
-            <div className="flex flex-col absolute top-16 right-0 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-30 bg-white">
+            <div className="flex flex-col absolute top-16 right-0 lg:top-16 shadow-2xl border-[1px] rounded-xl py-4 z-50 bg-white">
               {!authUserContext.user ? (
                 <>
                   <button

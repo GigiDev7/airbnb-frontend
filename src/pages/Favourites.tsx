@@ -4,6 +4,7 @@ import { Await, defer, redirect, useLoaderData } from "react-router-dom";
 import ResultCard from "../components/ResultCard";
 import { BASE_URL } from "../config";
 import { IProperty } from "../interfaces";
+import { catchError } from "../utils/httpErrorHelper";
 
 const Favourites = () => {
   const data: any = useLoaderData();
@@ -39,6 +40,7 @@ async function getFavourites(token: string) {
     return data;
   } catch (error) {
     console.log(error);
+    return catchError(error);
   }
 }
 

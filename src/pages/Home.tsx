@@ -37,7 +37,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div className="my-12 flex justify-center items-center">
+    <div className="mb-12 mt-32 flex justify-center items-center">
       <img
         className="relative rounded-xl w-[70%] h-[400px] animate-fade transition-all"
         src={images[activeImage].image}
