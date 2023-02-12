@@ -15,6 +15,7 @@ import axios from "axios";
 import { BASE_URL } from "../config";
 import { IProperty } from "../interfaces";
 import { calcDaysBetweenDates } from "../utils/calcDaysBetweenDates";
+import { makeReviewsPlural } from "../utils/makeStringPlural";
 
 const SingleResultPage = () => {
   const amenitiesModal = useToggleWindow();
@@ -99,7 +100,8 @@ const SingleResultPage = () => {
                   <h2 className="font-medium text-2xl mb-8 flex items-center">
                     <AiFillStar className="mr-1" /> {property.avgRating}
                     <span className="ml-3">
-                      {property.reviews.length} reviews
+                      {property.reviews.length}{" "}
+                      {makeReviewsPlural(property.reviews)}
                     </span>
                   </h2>
                   {property.reviews.map((review) => (
@@ -122,7 +124,10 @@ const SingleResultPage = () => {
                 <span className="flex items-center">
                   <AiFillStar /> {property.avgRating}
                 </span>
-                <span>{property.reviews.length} reviews</span>
+                <span>
+                  {property.reviews.length}{" "}
+                  {makeReviewsPlural(property.reviews)}
+                </span>
                 <p>
                   {property.location.city},{property.location.country}
                 </p>
@@ -134,16 +139,20 @@ const SingleResultPage = () => {
                 className="w-2/5 h-80 lg:w-1/4 rounded-l-xl"
                 src={`${BASE_URL}/${property.images[0]}`}
               />
-              <img
-                className="w-2/5 h-80 lg:w-1/4 rounded-r-xl"
-                src={`${BASE_URL}/${property.images[1]}`}
-              />
-              <button
-                onClick={imageSlider.showWindow}
-                className="absolute flex items-center right-16 lg:right-64 bottom-5 p-2 rounded-xl hover:bg-gray-200 bg-white"
-              >
-                <MdOutlinePhotoSizeSelectLarge /> Show all photos
-              </button>
+              {property.images[1] && (
+                <img
+                  className="w-2/5 h-80 lg:w-1/4 rounded-r-xl"
+                  src={`${BASE_URL}/${property.images[1]}`}
+                />
+              )}
+              {property.images.length > 1 && (
+                <button
+                  onClick={imageSlider.showWindow}
+                  className="absolute flex items-center right-16 lg:right-64 bottom-5 p-2 rounded-xl hover:bg-gray-200 bg-white"
+                >
+                  <MdOutlinePhotoSizeSelectLarge /> Show all photos
+                </button>
+              )}
             </div>
 
             <div className="mt-8 border-b-[1px] pb-12 flex justify-between lg:w-4/5 lg:mx-auto">
@@ -163,7 +172,8 @@ const SingleResultPage = () => {
                 <h3 className="flex items-center font-semibold">
                   <AiFillStar /> {property.avgRating}
                   <span className="ml-2 text-gray-600 font-medium">
-                    {property.reviews.length} reviews
+                    {property.reviews.length}{" "}
+                    {makeReviewsPlural(property.reviews)}
                   </span>
                 </h3>
                 <div className="flex flex-col gap-3">
@@ -258,7 +268,8 @@ const SingleResultPage = () => {
             <div className="mt-8 border-b-[1px] pb-12 lg:w-4/5 lg:mx-auto">
               <h2 className="font-semibold text-xl mb-8 flex items-center">
                 <AiFillStar />
-                {property.avgRating} - {property.reviews.length} reviews
+                {property.avgRating} - {property.reviews.length}{" "}
+                {makeReviewsPlural(property.reviews)}
               </h2>
               {property.reviews.slice(0, 5).map((review) => (
                 <Review key={review._id} review={review} />
@@ -267,7 +278,8 @@ const SingleResultPage = () => {
                 onClick={reviewsModal.showWindow}
                 className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-8"
               >
-                Show all {property.reviews.length} reviews
+                Show all {property.reviews.length}{" "}
+                {makeReviewsPlural(property.reviews)}
               </button>
             </div>
           </div>
