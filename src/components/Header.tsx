@@ -1,5 +1,5 @@
-import React, { useContext, MouseEvent } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, MouseEvent, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { TbWorld } from "react-icons/tb";
 import { GoThreeBars } from "react-icons/go";
 import { BsFillPersonFill } from "react-icons/bs";
@@ -17,6 +17,14 @@ const Header: React.FC = () => {
 
   const authFormContext = useContext(AuthFormContext);
   const authUserContext = useContext(AuthUserContext);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (personWindow.isWindowShown) {
+      personWindow.hideWindow();
+    }
+  }, [location.pathname]);
 
   const handleFormShow = (e: MouseEvent, type: string) => {
     authFormContext.showAuthForm(type, e);
