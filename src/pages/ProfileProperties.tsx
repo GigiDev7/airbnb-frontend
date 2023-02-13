@@ -14,7 +14,7 @@ const ProfileProperties = () => {
       <Await resolve={data.properties}>
         {(properties) => (
           <div className="w-full">
-            {!properties.isError && properties.length && (
+            {!properties.isError && properties.length > 0 && (
               <div>
                 {properties.map((item: IProperty) => (
                   <ResultCard key={item._id} property={item} isEdit={true} />

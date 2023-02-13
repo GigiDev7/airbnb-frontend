@@ -16,7 +16,7 @@ const Favourites = () => {
       <Await resolve={data.favourites}>
         {(favourites) => (
           <div className="mt-32">
-            {favourites.length &&
+            {favourites.length > 0 &&
               favourites.map((item: IProperty) => (
                 <ResultCard property={item} key={item._id} />
               ))}

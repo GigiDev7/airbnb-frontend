@@ -21,6 +21,7 @@ import ProfileProperties from "./pages/ProfileProperties";
 import ProfileBookings from "./pages/ProfileBookings";
 import { loader as profilePropertiesLoader } from "./pages/ProfileProperties";
 import ProfilePropertyEdit from "./pages/ProfilePropertyEdit";
+import { loader as profileBookingsLoader } from "./pages/ProfileBookings";
 
 const router = createBrowserRouter([
   {
@@ -67,7 +68,11 @@ const router = createBrowserRouter([
         element: <ProfileProperties />,
         loader: profilePropertiesLoader,
       },
-      { path: "bookings", element: <ProfileBookings /> },
+      {
+        path: "bookings",
+        element: <ProfileBookings />,
+        loader: profileBookingsLoader,
+      },
       { path: "property/:propertyId", element: <ProfilePropertyEdit /> },
     ],
   },
