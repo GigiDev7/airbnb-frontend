@@ -7,6 +7,7 @@ import axios from "axios";
 import { BASE_URL } from "../config";
 import { catchError } from "../utils/httpErrorHelper";
 import AuthUserContext from "../context/authUserContext";
+import { useLogout } from "../hooks/useLogout";
 
 const AuthForm: React.FC = () => {
   const [wasRegistered, setWasRegistered] = useState(false);
@@ -14,6 +15,8 @@ const AuthForm: React.FC = () => {
   const authFormContext = useContext(AuthFormContext);
   const fetcher = useFetcher();
   const { data } = fetcher;
+
+  const { logout } = useLogout();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -37,8 +40,13 @@ const AuthForm: React.FC = () => {
     if (data && !data.isError && authFormContext.type === "Login") {
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
+      const expiresAt = Date.now() + 60 * 60 * 1000;
+      localStorage.setItem("expiresAt", expiresAt.toString());
       authUserContext.updateUser(data.user);
       authFormContext.hideAuthForm();
+      setTimeout(() => {
+        logout();
+      }, 60 * 60 * 1000);
     }
 
     return () => {
