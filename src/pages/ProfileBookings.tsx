@@ -7,12 +7,14 @@ import {
   Await,
   useLoaderData,
   useSearchParams,
+  useNavigation,
 } from "react-router-dom";
 import { BASE_URL } from "../config";
 import { catchError } from "../utils/httpErrorHelper";
 
 const ProfileBookings = () => {
   const data: any = useLoaderData();
+  const navigation = useNavigation();
   const [searchParams, setSearchParams] = useSearchParams();
   const active = searchParams.get("active");
 
@@ -27,7 +29,11 @@ const ProfileBookings = () => {
                   to={active ? "" : "?active=true"}
                   className="mb-12 mx-auto bg-red-500 text-white py-2 px-3 rounded-md hover:bg-red-600"
                 >
-                  {active ? "Show all bookings" : "Show active bookings"}
+                  {navigation.state === "loading"
+                    ? "Loading..."
+                    : active
+                    ? "Show all bookings"
+                    : "Show active bookings"}
                 </Link>
                 {bookings.map((booking: any, index: number) => (
                   <p key={index}>booking</p>
