@@ -16,13 +16,14 @@ const Favourites = () => {
       <Await resolve={data.favourites}>
         {(favourites) => (
           <div className="mt-32">
-            {favourites.length ? (
+            {favourites.length &&
               favourites.map((item: IProperty) => (
                 <ResultCard property={item} key={item._id} />
-              ))
-            ) : (
+              ))}
+            {!favourites.length && !favourites.isError && (
               <p>You don't have any favourited properties</p>
             )}
+            {favourites.isError && <p>{favourites.message}</p>}
           </div>
         )}
       </Await>

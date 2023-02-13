@@ -1,10 +1,17 @@
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  MouseEvent,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import { BiSearch } from "react-icons/bi";
 import { useToggleWindow } from "../hooks/useWindow";
 import { useGuestQuantity } from "../hooks/useGuestQuantity";
 import GuestQuantityBox from "./GuestQuantityBox";
 import { redirect, useSubmit, useLocation } from "react-router-dom";
 import { capitalize } from "../utils/capitalize";
+import cities from "cities.json";
 
 const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
   showForm,
@@ -15,6 +22,8 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
     checkIn: "",
     checkOut: "",
   });
+  const [filteredCities, setFilteredCities] = useState<{ name: string }[]>([]);
+  const [isPending, startTransition] = useTransition();
 
   const {
     isWindowShown: isQuantityWindowShown,
@@ -60,8 +69,26 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
     });
   }, []);
 
+  const handleCityClick = (city: string) => {
+    setFormData((prev) => {
+      return { ...prev, destination: city };
+    });
+    setFilteredCities([]);
+  };
+
   const handleInputChange = (e: ChangeEvent) => {
     const target = e.target as HTMLInputElement;
+    if (target.name === "destination") {
+      if (!target.value) {
+        setFilteredCities([]);
+      } else {
+        const filtered = (cities as any[]).filter((c) =>
+          c.name.includes(capitalize(target.value.toLowerCase()))
+        );
+
+        startTransition(() => setFilteredCities(filtered));
+      }
+    }
     setFormData((prev) => {
       return { ...prev, [target.name]: target.value };
     });
@@ -112,7 +139,7 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
         onClick={(e) => preserveOpenForm(e)}
         className="flex items-center border-2 p-2 rounded-3xl relative"
       >
-        <div className="flex flex-col pl-2 ">
+        <div className="flex flex-col pl-2 relative">
           <label>Where</label>
           <input
             onChange={(e) => handleInputChange(e)}
@@ -122,6 +149,21 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
             className="outline-0 "
             placeholder="Search destinations"
           />
+          {filteredCities.length > 0 && (
+            <ul className="max-h-48 overflow-y-auto absolute top-16 z-50 py-4 flex flex-col gap-4 bg-white border-[1px] rounded-md shadow-lg">
+              {!isPending &&
+                filteredCities.map((c, index) => (
+                  <li
+                    onClick={() => handleCityClick(c.name)}
+                    className="cursor-pointer hover:bg-gray-300 pl-4 pr-8 py-2 w-full"
+                    key={index}
+                  >
+                    {c.name}
+                  </li>
+                ))}
+              {isPending && <p className="pl-4 pr-8 w-full">Loading...</p>}
+            </ul>
+          )}
         </div>
         <span className="mx-2 text-gray-400 text-lg">&#9474;</span>
         <div className="flex flex-col">
