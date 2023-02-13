@@ -20,6 +20,7 @@ import ProfileHome from "./pages/ProfileHome";
 import ProfileProperties from "./pages/ProfileProperties";
 import ProfileBookings from "./pages/ProfileBookings";
 import { loader as profilePropertiesLoader } from "./pages/ProfileProperties";
+import ProfilePropertyEdit from "./pages/ProfilePropertyEdit";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,7 @@ const router = createBrowserRouter([
         loader: profilePropertiesLoader,
       },
       { path: "bookings", element: <ProfileBookings /> },
+      { path: "property/:propertyId", element: <ProfilePropertyEdit /> },
     ],
   },
 ]);

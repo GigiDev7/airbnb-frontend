@@ -17,7 +17,7 @@ const ProfileProperties = () => {
             {!properties.isError && properties.length && (
               <div>
                 {properties.map((item: IProperty) => (
-                  <ResultCard key={item._id} property={item} />
+                  <ResultCard key={item._id} property={item} isEdit={true} />
                 ))}
               </div>
             )}
@@ -42,7 +42,6 @@ async function getProperties(ownerId: string, token: string) {
         },
       }
     );
-    console.log(data);
     return data;
   } catch (error) {
     return catchError(error);

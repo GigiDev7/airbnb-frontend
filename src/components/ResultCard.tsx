@@ -1,6 +1,11 @@
 import React, { MouseEvent, useContext } from "react";
-import { Link } from "react-router-dom";
-import { AiFillStar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  AiFillStar,
+  AiOutlineHeart,
+  AiFillHeart,
+  AiFillEdit,
+} from "react-icons/ai";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 import { IProperty } from "../interfaces";
 import { BASE_URL } from "../config";
@@ -10,10 +15,14 @@ import AuthUserContext from "../context/authUserContext";
 import axios from "axios";
 import AuthFormContext from "../context/authFormContext";
 
-const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
+const ResultCard: React.FC<{ property: IProperty; isEdit?: boolean }> = ({
+  property,
+  isEdit = false,
+}) => {
   const authFormContext = useContext(AuthFormContext);
   const { imageIndex, changeImageIndex } = useImageSlide(property.images);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const userContext = useContext(AuthUserContext);
 
@@ -50,11 +59,19 @@ const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
     }
   };
 
+  const handleEditClick = (e: MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    navigate(`/profile/property/${property._id}`);
+  };
+
   return (
     <Link
       to={`/property/${property._id}${location.search}`}
       target="_blank"
-      className="flex flex-col  w-1/3 lg:w-1/5 relative icon-container"
+      className={`flex flex-col ${
+        isEdit ? "w-1/2 lg:w-1/4" : "w-1/3 lg:w-1/5"
+      }  relative icon-container`}
     >
       <div className="absolute top-1/2 -translate-y-1/2 flex justify-between w-full px-2">
         <BsArrowLeftCircle
@@ -66,8 +83,14 @@ const ResultCard: React.FC<{ property: IProperty }> = ({ property }) => {
           className="text-black text-3xl cursor-pointer arrow-icon"
         />
       </div>
-      {userContext.user &&
-      userContext.user.favourites.includes(property._id) ? (
+
+      {isEdit ? (
+        <AiFillEdit
+          onClick={(e) => handleEditClick(e)}
+          className="absolute right-2 top-2 text-3xl"
+        />
+      ) : userContext.user &&
+        userContext.user.favourites.includes(property._id) ? (
         <AiFillHeart
           onClick={(e) => handleFavourProperty(e, "remove")}
           className="absolute right-2 top-2 text-2xl"

@@ -148,7 +148,7 @@ const SingleResultPage = () => {
               {property.images.length > 1 && (
                 <button
                   onClick={imageSlider.showWindow}
-                  className="absolute flex items-center right-16 lg:right-64 bottom-5 p-2 rounded-xl hover:bg-gray-200 bg-white"
+                  className="absolute flex items-center right-16 lg:right-[22rem] bottom-5 p-2 rounded-xl hover:bg-gray-200 bg-white"
                 >
                   <MdOutlinePhotoSizeSelectLarge /> Show all photos
                 </button>
