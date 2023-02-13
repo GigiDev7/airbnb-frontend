@@ -16,6 +16,10 @@ import ProtectRoute from "./ProtectRoute";
 import Profile from "./pages/Profile";
 import { useEffect } from "react";
 import { useLogout } from "./hooks/useLogout";
+import ProfileHome from "./pages/ProfileHome";
+import ProfileProperties from "./pages/ProfileProperties";
+import ProfileBookings from "./pages/ProfileBookings";
+import { loader as profilePropertiesLoader } from "./pages/ProfileProperties";
 
 const router = createBrowserRouter([
   {
@@ -49,11 +53,21 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
+    errorElement: <ErrorPage />,
     element: (
       <ProtectRoute>
         <Profile />
       </ProtectRoute>
     ),
+    children: [
+      { index: true, element: <ProfileHome /> },
+      {
+        path: "properties",
+        element: <ProfileProperties />,
+        loader: profilePropertiesLoader,
+      },
+      { path: "bookings", element: <ProfileBookings /> },
+    ],
   },
 ]);
 

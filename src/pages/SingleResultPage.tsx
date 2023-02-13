@@ -180,6 +180,7 @@ const SingleResultPage = () => {
                   <div className="flex flex-col border-[2px] border-black p-2 rounded-md">
                     <label className="font-medium text-sm">check-in</label>
                     <input
+                      className="outline-0"
                       onChange={(e) => handleDateChange(e, "checkIn")}
                       value={reserveDates.checkIn}
                       type="date"
@@ -188,7 +189,8 @@ const SingleResultPage = () => {
                   <div className="flex flex-col border-[2px] border-black p-2 rounded-md">
                     <label className="font-medium text-sm">checkout</label>
                     <input
-                      onChange={(e) => handleDateChange(e, "checkIn")}
+                      className="outline-0"
+                      onChange={(e) => handleDateChange(e, "checkOut")}
                       value={reserveDates.checkOut}
                       type="date"
                     />
@@ -224,7 +226,9 @@ const SingleResultPage = () => {
                 <p className="border-t-2 pt-4 font-medium text-center">
                   Total{" "}
                   {differenceBetweenDates &&
-                    differenceBetweenDates * property.price}
+                  !isNaN(differenceBetweenDates * property.price)
+                    ? differenceBetweenDates * property.price
+                    : 0}
                   $
                 </p>
               </div>

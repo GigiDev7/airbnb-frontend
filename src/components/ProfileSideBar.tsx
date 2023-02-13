@@ -9,13 +9,38 @@ const ProfileSideBar = () => {
   const { logout } = useLogout();
 
   return (
-    <aside className="flex flex-col items-start gap-6 border-r-[1px]  border-black w-fit pr-8">
-      <button className="hover:bg-gray-300 py-3 pl-2 w-36 text-start rounded-md">
+    <aside className="flex flex-col items-start gap-6 border-r-[1px] h-fit  border-black w-fit pr-8">
+      <NavLink
+        to=""
+        end={true}
+        className={({ isActive }) =>
+          `${
+            isActive && "bg-gray-300"
+          } hover:bg-gray-300 py-3 pl-2 w-36 text-start rounded-md`
+        }
+      >
         Profile
-      </button>
-      <button className="hover:bg-gray-300 py-3 pl-2 w-36 text-start rounded-md">
+      </NavLink>
+      <NavLink
+        to="properties"
+        className={({ isActive }) =>
+          `${
+            isActive && "bg-gray-300"
+          } hover:bg-gray-300 py-3 pl-2 w-36 text-start rounded-md`
+        }
+      >
         My properties
-      </button>
+      </NavLink>
+      <NavLink
+        to="bookings"
+        className={({ isActive }) =>
+          `${
+            isActive && "bg-gray-300"
+          } hover:bg-gray-300 py-3 pl-2 w-36 text-start rounded-md`
+        }
+      >
+        My bookings
+      </NavLink>
       <Link
         to="/favourites"
         className="hover:bg-gray-300 py-3 pl-2 w-36 text-start rounded-md"
