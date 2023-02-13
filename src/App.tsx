@@ -13,6 +13,9 @@ import ErrorPage from "./components/ErrorPage";
 import Favourites from "./pages/Favourites";
 import { loader as favouritesLoader } from "./pages/Favourites";
 import ProtectRoute from "./ProtectRoute";
+import Profile from "./pages/Profile";
+import { useEffect } from "react";
+import { useLogout } from "./hooks/useLogout";
 
 const router = createBrowserRouter([
   {
@@ -44,9 +47,33 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/profile",
+    element: (
+      <ProtectRoute>
+        <Profile />
+      </ProtectRoute>
+    ),
+  },
 ]);
 
 function App() {
+  const { logout } = useLogout();
+
+  useEffect(() => {
+    const expiresAt = localStorage.getItem("expiresAt");
+    if (expiresAt) {
+      const remainingTime = +expiresAt - Date.now();
+      if (remainingTime < 0) {
+        logout();
+      } else {
+        setTimeout(() => {
+          logout();
+        }, remainingTime);
+      }
+    }
+  }, []);
+
   return (
     <AuthUserContextProvider>
       <AuthFormContextProvider>

@@ -121,9 +121,12 @@ const Header: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <button className="pl-4 text-start pr-16 hover:bg-gray-100 py-4">
+                  <Link
+                    to="/profile"
+                    className="pl-4 text-start pr-16 hover:bg-gray-100 py-4"
+                  >
                     Profile
-                  </button>
+                  </Link>
                   <Link
                     to="/favourites"
                     className="pl-4 text-start pr-16 hover:bg-gray-100 py-4"
