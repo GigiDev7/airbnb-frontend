@@ -4,6 +4,8 @@ import React, {
   useEffect,
   useState,
   useTransition,
+  useDeferredValue,
+  Suspense,
 } from "react";
 import { BiSearch } from "react-icons/bi";
 import { useToggleWindow } from "../hooks/useWindow";
@@ -24,6 +26,8 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
   });
   const [filteredCities, setFilteredCities] = useState<{ name: string }[]>([]);
   const [isPending, startTransition] = useTransition();
+
+  const defferedCities = useDeferredValue(filteredCities);
 
   const {
     isWindowShown: isQuantityWindowShown,
@@ -150,18 +154,17 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
             placeholder="Search destinations"
           />
           {filteredCities.length > 0 && (
-            <ul className="max-h-48 overflow-y-auto absolute top-16 z-50 py-4 flex flex-col gap-4 bg-white border-[1px] rounded-md shadow-lg">
-              {!isPending &&
-                filteredCities.map((c, index) => (
-                  <li
-                    onClick={() => handleCityClick(c.name)}
-                    className="cursor-pointer hover:bg-gray-300 pl-4 pr-8 py-2 w-full"
-                    key={index}
-                  >
-                    {c.name}
-                  </li>
-                ))}
-              {isPending && <p className="pl-4 pr-8 w-full">Loading...</p>}
+            <ul className="max-h-48 w-56 overflow-y-auto absolute left-0 top-16 z-50 py-4 flex flex-col gap-4 bg-white border-[1px] rounded-md shadow-lg">
+              {defferedCities.map((c, index) => (
+                <li
+                  onClick={() => handleCityClick(c.name)}
+                  className="cursor-pointer hover:bg-gray-300 pl-4 pr-8 py-2 w-full"
+                  key={index}
+                >
+                  {c.name}
+                </li>
+              ))}
+              {/*  {isPending && <p className="pl-4 pr-8 w-full">Loading...</p>} */}
             </ul>
           )}
         </div>
