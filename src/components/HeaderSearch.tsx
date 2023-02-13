@@ -44,6 +44,7 @@ const HeaderSearch: React.FC<{ showForm: (e: MouseEvent) => void }> = ({
   const preserveOpenForm = (e: MouseEvent) => {
     showForm(e);
     hideWindow();
+    setFilteredCities([]);
   };
 
   const submit = useSubmit();
