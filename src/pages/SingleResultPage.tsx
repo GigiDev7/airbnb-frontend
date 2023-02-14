@@ -16,6 +16,7 @@ import { BASE_URL } from "../config";
 import { IProperty } from "../interfaces";
 import { calcDaysBetweenDates } from "../utils/calcDaysBetweenDates";
 import { makeReviewsPlural } from "../utils/makeStringPlural";
+import DateInput from "../components/DateInput";
 
 const SingleResultPage = () => {
   const amenitiesModal = useToggleWindow();
@@ -36,11 +37,11 @@ const SingleResultPage = () => {
   );
 
   const handleDateChange = (
-    e: ChangeEvent<HTMLInputElement>,
+    newVal: string,
     type: keyof typeof reserveDates
   ) => {
     setReserverDates((prev) => {
-      return { ...prev, [type]: e.target.value };
+      return { ...prev, [type]: newVal };
     });
   };
 
@@ -178,21 +179,19 @@ const SingleResultPage = () => {
                 </h3>
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-col border-[2px] border-black p-2 rounded-md">
-                    <label className="font-medium text-sm">check-in</label>
-                    <input
-                      className="outline-0"
-                      onChange={(e) => handleDateChange(e, "checkIn")}
+                    <label className="font-medium text-sm mb-2">check-in</label>
+                    <DateInput
                       value={reserveDates.checkIn}
-                      type="date"
+                      type="checkIn"
+                      handleChange={handleDateChange}
                     />
                   </div>
-                  <div className="flex flex-col border-[2px] border-black p-2 rounded-md">
-                    <label className="font-medium text-sm">checkout</label>
-                    <input
-                      className="outline-0"
-                      onChange={(e) => handleDateChange(e, "checkOut")}
+                  <div className="w-44 flex flex-col border-[2px] border-black p-2 rounded-md">
+                    <label className="font-medium text-sm mb-2">checkout</label>
+                    <DateInput
                       value={reserveDates.checkOut}
-                      type="date"
+                      type="checkOut"
+                      handleChange={handleDateChange}
                     />
                   </div>
                   <div
@@ -226,6 +225,7 @@ const SingleResultPage = () => {
                 <p className="border-t-2 pt-4 font-medium text-center">
                   Total{" "}
                   {differenceBetweenDates &&
+                  differenceBetweenDates * property.price > 0 &&
                   !isNaN(differenceBetweenDates * property.price)
                     ? differenceBetweenDates * property.price
                     : 0}
