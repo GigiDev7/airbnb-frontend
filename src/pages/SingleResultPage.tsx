@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState, ChangeEvent } from "react";
+import { Suspense } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { MdOutlinePhotoSizeSelectLarge } from "react-icons/md";
 import { BiBed } from "react-icons/bi";
@@ -6,71 +6,20 @@ import { useToggleWindow } from "../hooks/useWindow";
 import ModalLayout from "../components/ModalLayout";
 import Review from "../components/Review";
 import ImagesSlider from "../components/ImagesSlider";
-import { SlArrowDown, SlArrowUp } from "react-icons/sl";
-import { useGuestQuantity } from "../hooks/useGuestQuantity";
-import GuestQuantityBox from "../components/GuestQuantityBox";
-import { defer, Await, useLoaderData, useLocation } from "react-router-dom";
+import { defer, Await, useLoaderData } from "react-router-dom";
 import { catchError } from "../utils/httpErrorHelper";
 import axios from "axios";
 import { BASE_URL } from "../config";
 import { IProperty } from "../interfaces";
-import { calcDaysBetweenDates } from "../utils/calcDaysBetweenDates";
 import { makeReviewsPlural } from "../utils/makeStringPlural";
-import DateInput from "../components/DateInput";
+import ReserverForm from "../components/ReserverForm";
 
 const SingleResultPage = () => {
   const amenitiesModal = useToggleWindow();
   const reviewsModal = useToggleWindow();
   const imageSlider = useToggleWindow();
-  const quantityWindow = useToggleWindow();
 
   const data: any = useLoaderData();
-  const location = useLocation();
-  const [reserveDates, setReserverDates] = useState({
-    checkIn: "",
-    checkOut: "",
-  });
-
-  const differenceBetweenDates = calcDaysBetweenDates(
-    new Date(reserveDates.checkIn),
-    new Date(reserveDates.checkOut)
-  );
-
-  const handleDateChange = (
-    newVal: string,
-    type: keyof typeof reserveDates
-  ) => {
-    setReserverDates((prev) => {
-      return { ...prev, [type]: newVal };
-    });
-  };
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const checkIn = searchParams.get("checkIn");
-    const checkOut = searchParams.get("checkOut");
-    const adults = searchParams.get("adults");
-    const children = searchParams.get("children");
-    const infants = searchParams.get("infants");
-    const pets = searchParams.get("pets");
-    if (checkIn && checkOut) {
-      setReserverDates({ checkIn, checkOut });
-    }
-    updateQuantity({
-      adults: adults ? +adults : 0,
-      children: children ? +children : 0,
-      infants: infants ? +infants : 0,
-      pets: pets ? +pets : 0,
-    });
-  }, []);
-
-  const {
-    guestQuantity,
-    decreaseQuantity,
-    increaseQuantity,
-    updateQuantity,
-    sumOfQuantities,
-  } = useGuestQuantity(1);
 
   return (
     <Suspense
@@ -166,74 +115,8 @@ const SingleResultPage = () => {
                   {property.bedsQuantity} beds {property.rooms.bathrooms} bath
                 </p>
               </div>
-              <div className="flex flex-col relative border-2 rounded-xl py-12 px-20 gap-4">
-                <h2 className="font-semibold text-lg">
-                  ${property.price} <span className="font-normal">night</span>
-                </h2>
-                <h3 className="flex items-center font-semibold">
-                  <AiFillStar /> {property.avgRating}
-                  <span className="ml-2 text-gray-600 font-medium">
-                    {property.reviews.length}{" "}
-                    {makeReviewsPlural(property.reviews)}
-                  </span>
-                </h3>
-                <div className="flex flex-col gap-3">
-                  <div className="flex flex-col border-[2px] border-black p-2 rounded-md">
-                    <label className="font-medium text-sm mb-2">check-in</label>
-                    <DateInput
-                      value={reserveDates.checkIn}
-                      type="checkIn"
-                      handleChange={handleDateChange}
-                      property={property}
-                    />
-                  </div>
-                  <div className="w-44 flex flex-col border-[2px] border-black p-2 rounded-md">
-                    <label className="font-medium text-sm mb-2">checkout</label>
-                    <DateInput
-                      value={reserveDates.checkOut}
-                      type="checkOut"
-                      handleChange={handleDateChange}
-                      property={property}
-                    />
-                  </div>
-                  <div
-                    onClick={quantityWindow.toggleWindow}
-                    className="flex items-center justify-between border-[2px] border-black rounded-lg p-2 cursor-pointer"
-                  >
-                    <div className="flex flex-col ">
-                      <h3 className="text-[10px] font-medium">GUESTS</h3>
-                      <p>{sumOfQuantities()}</p>
-                    </div>
-                    {quantityWindow.isWindowShown ? (
-                      <SlArrowUp />
-                    ) : (
-                      <SlArrowDown />
-                    )}
-                  </div>
-                  {quantityWindow.isWindowShown && (
-                    <div>
-                      <GuestQuantityBox
-                        data={Object.entries(guestQuantity)}
-                        decreaseQuantity={decreaseQuantity}
-                        increaseQuantity={increaseQuantity}
-                        absoluteTop={100}
-                      />
-                    </div>
-                  )}
-                  <button className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-lg text-white">
-                    Reserve
-                  </button>
-                </div>
-                <p className="border-t-2 pt-4 font-medium text-center">
-                  Total{" "}
-                  {differenceBetweenDates &&
-                  differenceBetweenDates * property.price > 0 &&
-                  !isNaN(differenceBetweenDates * property.price)
-                    ? differenceBetweenDates * property.price
-                    : 0}
-                  $
-                </p>
-              </div>
+
+              <ReserverForm property={property} />
             </div>
 
             <div className="mt-8 border-b-[1px] pb-12 lg:w-4/5 lg:mx-auto">
