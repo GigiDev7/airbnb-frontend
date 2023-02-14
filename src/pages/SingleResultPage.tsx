@@ -184,6 +184,7 @@ const SingleResultPage = () => {
                       value={reserveDates.checkIn}
                       type="checkIn"
                       handleChange={handleDateChange}
+                      property={property}
                     />
                   </div>
                   <div className="w-44 flex flex-col border-[2px] border-black p-2 rounded-md">
@@ -192,6 +193,7 @@ const SingleResultPage = () => {
                       value={reserveDates.checkOut}
                       type="checkOut"
                       handleChange={handleDateChange}
+                      property={property}
                     />
                   </div>
                   <div

@@ -7,6 +7,15 @@ export interface ICreatedBy {
   favourites: string[];
 }
 
+export interface IBooking {
+  user: ICreatedBy;
+  property: IProperty;
+  checkIn: Date;
+  checkOut: Date;
+  guests: number;
+  totalPrice: number;
+}
+
 export interface IRating {
   rating: number;
   _id: string;
@@ -38,4 +47,5 @@ export interface IProperty {
   images: string[];
   reviews: IReview[];
   ratings: IRating[];
+  bookings: IBooking[];
 }
