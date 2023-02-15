@@ -13,6 +13,7 @@ import { BASE_URL } from "../config";
 import { IProperty } from "../interfaces";
 import { makeReviewsPlural } from "../utils/makeStringPlural";
 import ReserverForm from "../components/ReserverForm";
+import ReviewSection from "../components/ReviewSection";
 
 const SingleResultPage = () => {
   const amenitiesModal = useToggleWindow();
@@ -55,7 +56,7 @@ const SingleResultPage = () => {
                     </span>
                   </h2>
                   {property.reviews.map((review) => (
-                    <div key={review._id}>
+                    <div className="mt-3" key={review._id}>
                       <Review review={review} />
                     </div>
                   ))}
@@ -153,24 +154,10 @@ const SingleResultPage = () => {
                 Show all {property.amenities.length} amenities
               </button>
             </div>
-
-            <div className="mt-8 border-b-[1px] pb-12 lg:w-4/5 lg:mx-auto">
-              <h2 className="font-semibold text-xl mb-8 flex items-center">
-                <AiFillStar />
-                {property.avgRating} - {property.reviews.length}{" "}
-                {makeReviewsPlural(property.reviews)}
-              </h2>
-              {property.reviews.slice(0, 5).map((review) => (
-                <Review key={review._id} review={review} />
-              ))}
-              <button
-                onClick={reviewsModal.showWindow}
-                className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-8"
-              >
-                Show all {property.reviews.length}{" "}
-                {makeReviewsPlural(property.reviews)}
-              </button>
-            </div>
+            <ReviewSection
+              property={property}
+              showReviewModal={reviewsModal.showWindow}
+            />
           </div>
         )}
       </Await>
