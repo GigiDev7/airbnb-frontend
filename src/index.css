@@ -23,3 +23,15 @@ body {
 .icon-container:hover .arrow-icon {
   display: inline-block;
 }
+
+.star:hover {
+  color: black;
+}
+
+.star:hover ~ .star {
+  color: rgb(205, 202, 202);
+}
+
+.star-gray {
+  color: rgb(205, 202, 202);
+}

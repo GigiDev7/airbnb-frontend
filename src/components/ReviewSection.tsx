@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { BASE_URL } from "../config";
 import AuthUserContext from "../context/authUserContext";
 import { useToggleWindow } from "../hooks/useWindow";
 import { IProperty } from "../interfaces";
 import { makeReviewsPlural } from "../utils/makeStringPlural";
 import { MdCheckCircle, MdCancel } from "react-icons/md";
-import { AiFillStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import Review from "./Review";
 import { MouseEvent } from "react";
 
@@ -18,21 +18,44 @@ const ReviewSection = ({
   showReviewModal: (e: MouseEvent) => void;
 }) => {
   const reviewBox = useToggleWindow();
+  const ratingBox = useToggleWindow();
   const userContext = useContext(AuthUserContext);
 
   const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(0);
   const [reviewSucess, setReviewSuccess] = useState<null | boolean>(null);
+  const [ratingSucess, setRatingSuccess] = useState<null | boolean>(null);
+  const ratingRef = useRef(0);
 
-  const handleReviewAdd = async () => {
+  const updateRating = (rtng: number) => {
+    setRating(rtng);
+    ratingRef.current = rtng;
+  };
+
+  const openBox = (e: MouseEvent, type: "review" | "rating") => {
+    if (type == "rating") {
+      reviewBox.hideWindow();
+      ratingBox.showWindow(e);
+    } else {
+      ratingBox.hideWindow();
+      reviewBox.showWindow(e);
+    }
+  };
+
+  const handleAdd = async (type: "rating" | "review") => {
     const token = localStorage.getItem("token");
-    if (!reviewText || !token) return;
+    if (!token) return;
+    if (type === "rating" && !rating) return;
+    if (type === "review" && !reviewText) return;
+    if (type === "rating") setRatingSuccess(null);
+    if (type === "review") setReviewSuccess(null);
 
-    setReviewSuccess(null);
+    const postData = type === "rating" ? { rating } : { review: reviewText };
 
     try {
       const { data } = await axios.post(
-        `${BASE_URL}/reviews/property/${property._id}`,
-        { review: reviewText },
+        `${BASE_URL}/${type}s/property/${property._id}`,
+        postData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,14 +63,14 @@ const ReviewSection = ({
         }
       );
       console.log(data);
-      setReviewSuccess(true);
+      type === "rating" ? setRatingSuccess(true) : setReviewSuccess(true);
       setTimeout(() => {
-        setReviewSuccess(null);
+        type === "rating" ? setRatingSuccess(null) : setReviewSuccess(null);
       }, 1500);
-      reviewBox.hideWindow();
+      type === "rating" ? ratingBox.hideWindow() : reviewBox.hideWindow();
     } catch (error) {
       console.log(error);
-      setReviewSuccess(false);
+      type === "rating" ? setRatingSuccess(false) : setReviewSuccess(false);
     }
   };
 
@@ -55,7 +78,7 @@ const ReviewSection = ({
     <div className="mt-8 border-b-[1px] pb-12 lg:w-4/5 lg:mx-auto">
       <h2 className="font-semibold text-xl mb-8 flex items-center">
         <AiFillStar />
-        {property.avgRating} - {property.reviews.length}{" "}
+        {+property.avgRating.toFixed(1)} - {property.reviews.length}{" "}
         {makeReviewsPlural(property.reviews)}
       </h2>
       {property.reviews.length > 0 && (
@@ -76,24 +99,82 @@ const ReviewSection = ({
           </button>
         )}
         {userContext.user && userContext.user._id != property.createdBy._id && (
-          <button
-            onClick={reviewBox.showWindow}
-            className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-4"
-          >
-            Leave a review
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={(e) => openBox(e, "review")}
+              className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-4"
+            >
+              Leave a review
+            </button>
+            <button
+              onClick={(e) => openBox(e, "rating")}
+              className="border-[1px] border-black rounded-lg px-5 py-2 font-medium mt-4"
+            >
+              Leave rating
+            </button>
+          </div>
         )}
-        {reviewSucess === false && (
-          <p className="text-red-500 mt-2">
-            Something went wrong, please try again later
-          </p>
-        )}
-        {reviewSucess && (
-          <p className="mt-2 text-green-600 font-semibold">
-            Successfully added review!
-          </p>
-        )}
+        {reviewSucess === false ||
+          (ratingSucess === false && (
+            <p className="text-red-500 mt-2">
+              Something went wrong, please try again later
+            </p>
+          ))}
+        {reviewSucess ||
+          (ratingSucess && (
+            <p className="mt-2 text-green-600 font-semibold">
+              Successfully added {reviewSucess ? "review" : "rating"}!
+            </p>
+          ))}
       </div>
+      {ratingBox.isWindowShown && (
+        <div className="flex flex-col gap-3 star-container">
+          <div
+            onMouseEnter={() => setRating(0)}
+            onMouseLeave={() => setRating(ratingRef.current)}
+            className="flex mt-5 gap-2"
+          >
+            <AiFillStar
+              onClick={() => updateRating(1)}
+              className="text-3xl cursor-pointer star"
+            />
+            <AiFillStar
+              onClick={() => updateRating(2)}
+              className={`text-3xl cursor-pointer star ${
+                rating && rating < 2 && "star-gray"
+              }`}
+            />
+            <AiFillStar
+              onClick={() => updateRating(3)}
+              className={`text-3xl cursor-pointer star ${
+                rating && rating < 3 && "star-gray"
+              }`}
+            />
+            <AiFillStar
+              onClick={() => updateRating(4)}
+              className={`text-3xl cursor-pointer star ${
+                rating && rating < 4 && "star-gray"
+              }`}
+            />
+            <AiFillStar
+              onClick={() => updateRating(5)}
+              className={`text-3xl cursor-pointer star ${
+                rating && rating < 5 && "star-gray"
+              }`}
+            />
+          </div>
+          <div className="flex gap-3">
+            <MdCheckCircle
+              onClick={() => handleAdd("rating")}
+              className="text-3xl text-green-600 hover:text-green-700 cursor-pointer"
+            />
+            <MdCancel
+              onClick={ratingBox.hideWindow}
+              className="text-3xl text-red-600 hover:text-red-700 cursor-pointer"
+            />
+          </div>
+        </div>
+      )}
       {reviewBox.isWindowShown && (
         <div className="flex gap-4 rounded-md w-fit mt-5">
           <textarea
@@ -106,7 +187,7 @@ const ReviewSection = ({
           ></textarea>
           <div className="flex gap-3">
             <MdCheckCircle
-              onClick={handleReviewAdd}
+              onClick={() => handleAdd("review")}
               className="text-3xl text-green-600 hover:text-green-700 cursor-pointer"
             />
             <MdCancel
