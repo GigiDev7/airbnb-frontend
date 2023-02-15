@@ -2,6 +2,7 @@ import React, { useContext, useState, ChangeEvent, useEffect } from "react";
 import { BASE_URL } from "../config";
 import AuthUserContext from "../context/authUserContext";
 import { AiFillEdit } from "react-icons/ai";
+import { MdCancel } from "react-icons/md";
 
 const ProfileHome = () => {
   const userContext = useContext(AuthUserContext);
@@ -16,6 +17,11 @@ const ProfileHome = () => {
       setEmail(userContext.user?.email);
     }
   }, [userContext.user]);
+
+  const onCancelImageUpload = () => {
+    setImagePreview("");
+    setImageFile(null);
+  };
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -54,6 +60,12 @@ const ProfileHome = () => {
                 : `${BASE_URL}/${userContext.user?.image}`
             }
           />
+          {imagePreview && (
+            <MdCancel
+              onClick={onCancelImageUpload}
+              className="absolute -left-3 text-red-600 top-3 text-2xl cursor-pointer"
+            />
+          )}
           <div className="absolute right-3 top-3">
             <label htmlFor="profileImage">
               <AiFillEdit className="text-2xl cursor-pointer" />
