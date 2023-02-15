@@ -1,25 +1,44 @@
-import React, { useContext, useState, ChangeEvent } from "react";
+import React, { useContext, useState, ChangeEvent, useEffect } from "react";
 import { BASE_URL } from "../config";
 import AuthUserContext from "../context/authUserContext";
 import { AiFillEdit } from "react-icons/ai";
 
 const ProfileHome = () => {
   const userContext = useContext(AuthUserContext);
-  const [email, setEmail] = useState(userContext.user?.email);
-  const [imageFile, setImageFile] = useState(null);
+  const [email, setEmail] = useState("");
+  const [imageFile, setImageFile] = useState<null | File>(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
+  useEffect(() => {
+    if (userContext.user?.email) {
+      setEmail(userContext.user?.email);
+    }
+  }, [userContext.user]);
+
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement>,
-    type: "email" | "password" | "confirmPassword"
+    type: "email" | "password" | "confirmPassword" | "file"
   ) => {
     if (type === "email") {
       setEmail(e.target.value);
     } else if (type === "password") {
       setPassword(e.target.value);
-    } else {
+    } else if (type === "confirmPassword") {
       setPasswordConfirm(e.target.value);
+    } else {
+      if (e.target.files) {
+        const selectedImage = e.target.files[0];
+        if (selectedImage) {
+          setImageFile(selectedImage);
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            setImagePreview((e.target as any).result as any);
+          };
+          reader.readAsDataURL(selectedImage);
+        }
+      }
     }
   };
 
@@ -29,13 +48,22 @@ const ProfileHome = () => {
         <div className="relative">
           <img
             className="w-40 h-40 border-2 rounded-full"
-            src={`${BASE_URL}/${userContext.user?.image}`}
+            src={
+              imagePreview
+                ? imagePreview
+                : `${BASE_URL}/${userContext.user?.image}`
+            }
           />
           <div className="absolute right-3 top-3">
             <label htmlFor="profileImage">
               <AiFillEdit className="text-2xl cursor-pointer" />
             </label>
-            <input className="hidden" id="profileImage" type="file" />
+            <input
+              onChange={(e) => handleInputChange(e, "file")}
+              className="hidden"
+              id="profileImage"
+              type="file"
+            />
           </div>
         </div>
         <h2 className="font-semibold text-xl mt-3">
