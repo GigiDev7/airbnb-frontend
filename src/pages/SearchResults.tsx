@@ -48,7 +48,7 @@ const SearchResults: React.FC = () => {
                 <MdFilterListAlt className="mr-1" /> Filters
               </button>
             </div>
-            {!properties.isError && properties.length && (
+            {!properties.isError && properties.length > 0 && (
               <div className="flex flex-wrap justify-center lg:justify-start gap-12 mt-24 lg:gap-20 pb-12">
                 {properties.map((item: IProperty) => (
                   <ResultCard key={item._id} property={item} />
