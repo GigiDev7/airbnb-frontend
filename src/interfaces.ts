@@ -8,6 +8,7 @@ export interface ICreatedBy {
 }
 
 export interface IBooking {
+  _id: string;
   user: ICreatedBy;
   property: IProperty;
   checkIn: Date;
