@@ -1,4 +1,7 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { BASE_URL } from "../config";
+import { useNavigate } from "react-router-dom";
 
 interface IData {
   title: string;
@@ -15,6 +18,7 @@ interface IData {
   propertyType: string;
   typeOfPlace: string;
   amenities: string[];
+  images: FileList | null;
 }
 
 const AddNewProperty = () => {
@@ -33,33 +37,114 @@ const AddNewProperty = () => {
     propertyType: "",
     typeOfPlace: "",
     amenities: [],
+    images: null,
   });
+  const [isValid, setIsValid] = useState(true);
+
+  const navigate = useNavigate();
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    if(e.target.type == 'checkbox'){
-      const checked = (e.target as HTMLInputElement).checked
-      const value = e.target.value
-      
-      
+    if (e.target.type == "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;
+      const value = e.target.value;
+      if (checked) {
+        setPropertyData((prev) => {
+          return { ...prev, amenities: [...prev.amenities, value] };
+        });
+      } else {
+        setPropertyData((prev) => {
+          return {
+            ...prev,
+            amenities: prev.amenities.filter((el) => el !== value),
+          };
+        });
+      }
+    } else if (e.target.type == "file") {
+      const files = (e.target as HTMLInputElement).files;
+
+      if (files?.length) {
+        setPropertyData((prev) => {
+          return { ...prev, images: files };
+        });
+      }
+    } else {
+      setPropertyData((prev) => {
+        return { ...prev, [e.target.name]: e.target.value };
+      });
     }
-    setPropertyData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
   };
 
-  const handleSubmit = (e: React.MouseEvent) => {
+  const handleSubmit = async (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log(propertyData);
+    setIsValid(true);
+    if (Object.values(propertyData).some((el) => !el)) {
+      setIsValid(false);
+      return;
+    } else {
+      const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user")!);
+      try {
+        const propertyRes = await axios.post(
+          `${BASE_URL}/property`,
+          {
+            createdBy: user._id,
+            title: propertyData.title,
+            description: propertyData.description,
+            location: {
+              country: propertyData.country,
+              city: propertyData.city,
+              address: propertyData.address,
+            },
+            maxGuests: propertyData.maxGuests,
+            bedsQuantity: propertyData.beds,
+            price: propertyData.price,
+            amenities: propertyData.amenities,
+            propertyType: propertyData.propertyType,
+            typeOfPlace: propertyData.typeOfPlace,
+            rooms: {
+              total: propertyData.totalRooms,
+              bedrooms: propertyData.bedrooms,
+              bathrooms: propertyData.bathrooms,
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const formData = new FormData();
+        const files = Array.from(propertyData.images!);
+        for (let f of files) {
+          formData.append("images", f);
+        }
+        const imageRes = await axios.post(
+          `${BASE_URL}/images/${propertyRes.data._id}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        navigate("/profile/properties");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
     <div className="flex flex-col items-center mb-12">
       <h2 className="font-semibold text-xl">Add new property</h2>
-      <form className="w-full flex flex-col gap-8 items-center mt-12">
+      <form
+        encType="multipart/form-data"
+        className="w-full flex flex-col gap-8 items-center mt-12"
+      >
         <input
           onChange={(e) => handleChange(e)}
           value={propertyData.title}
@@ -234,6 +319,19 @@ const AddNewProperty = () => {
             </div>
           </div>
         </div>
+        <div className="mt-4 flex w-1/2 flex-col items-center gap-5">
+          <label className="font-medium">Select images</label>
+          <input
+            className="border-[1px] "
+            accept="image/*"
+            onChange={(e) => handleChange(e)}
+            type="file"
+            multiple
+          />
+        </div>
+        {!isValid && (
+          <span className="text-red-500">Please fill all fields!</span>
+        )}
         <button
           onClick={(e) => handleSubmit(e)}
           type="submit"

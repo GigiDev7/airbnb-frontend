@@ -22,7 +22,7 @@ const ProfileProperties = () => {
               Add new property
             </Link>
             {!properties.isError && properties.length > 0 && (
-              <div>
+              <div className="flex justify-between gap-8 flex-wrap">
                 {properties.map((item: IProperty) => (
                   <ResultCard key={item._id} property={item} isEdit={true} />
                 ))}

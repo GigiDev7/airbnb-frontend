@@ -117,7 +117,7 @@ const ResultCard: React.FC<{ property: IProperty; isEdit?: boolean }> = ({
         </div>
         <div>
           <p className="flex items-center">
-            <AiFillStar /> <span>{+property.avgRating.toFixed(1)}</span>
+            <AiFillStar /> <span>{property.avgRating}</span>
           </p>
         </div>
       </div>

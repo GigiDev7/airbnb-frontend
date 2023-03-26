@@ -78,7 +78,7 @@ const ReviewSection = ({
     <div className="mt-8 border-b-[1px] pb-12 lg:w-4/5 lg:mx-auto">
       <h2 className="font-semibold text-xl mb-8 flex items-center">
         <AiFillStar />
-        {+property.avgRating.toFixed(1)} - {property.reviews.length}{" "}
+        {+property.avgRating} - {property.reviews.length}{" "}
         {makeReviewsPlural(property.reviews)}
       </h2>
       {property.reviews.length > 0 && (

@@ -104,7 +104,7 @@ const ReserverForm = ({ property }: { property: IProperty }) => {
         ${property.price} <span className="font-normal">night</span>
       </h2>
       <h3 className="flex items-center font-semibold">
-        <AiFillStar /> {+property.avgRating.toFixed(1)}
+        <AiFillStar /> {+property.avgRating}
         <span className="ml-2 text-gray-600 font-medium">
           {property.reviews.length} {makeReviewsPlural(property.reviews)}
         </span>

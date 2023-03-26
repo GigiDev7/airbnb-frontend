@@ -49,8 +49,7 @@ const SingleResultPage = () => {
               <ModalLayout closeModal={reviewsModal.hideWindow}>
                 <div className="self-start mt-16 w-full">
                   <h2 className="font-medium text-2xl mb-8 flex items-center">
-                    <AiFillStar className="mr-1" />{" "}
-                    {+property.avgRating.toFixed(1)}
+                    <AiFillStar className="mr-1" /> {+property.avgRating}
                     <span className="ml-3">
                       {property.reviews.length}{" "}
                       {makeReviewsPlural(property.reviews)}
@@ -74,7 +73,7 @@ const SingleResultPage = () => {
               <h1 className="text-2xl font-semibold">{property.title}</h1>
               <div className="flex items-center font-medium gap-4 mt-1">
                 <span className="flex items-center">
-                  <AiFillStar /> {+property.avgRating.toFixed(1)}
+                  <AiFillStar /> {+property.avgRating}
                 </span>
                 <span>
                   {property.reviews.length}{" "}

@@ -1,3 +1,3 @@
-export const BASE_URL = "https://airbnb-1siu.onrender.com";
+export const BASE_URL = "http://localhost:8000";
 
 //"https://airbnb-1siu.onrender.com"
